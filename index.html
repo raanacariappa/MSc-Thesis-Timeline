@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MSc Thesis Timeline | Cranfield University</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
+
+    header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      color: white;
+      padding: 32px 48px 24px;
+      border-bottom: 4px solid #e94560;
+    }
+    header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.3px; }
+    header p { font-size: 13.5px; color: #a8b8d8; margin-top: 4px; }
+    header .badges { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .badge {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #c8d8f0;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .container { padding: 32px 48px; max-width: 1400px; margin: 0 auto; }
+
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 14px;
+      margin-bottom: 28px; align-items: center;
+    }
+    .legend-title { font-size: 13px; font-weight: 600; color: #555; margin-right: 4px; }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #444; }
+    .legend-dot { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+
+    .gantt-wrapper {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+      overflow: hidden;
+      margin-bottom: 36px;
+    }
+    .gantt-header-row {
+      display: flex;
+      background: #1a1a2e;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      height: 38px;
+      align-items: center;
+    }
+    .task-col { min-width: 220px; width: 220px; padding: 0 14px; border-right: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+    .timeline-col { flex: 1; overflow: hidden; position: relative; }
+    .month-headers { display: flex; height: 38px; }
+    .month-block {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 600;
+      border-right: 2px solid rgba(255,255,255,0.15);
+      letter-spacing: 0.5px;
+    }
+    .day-header-row { display: flex; background: #f0f3f8; height: 26px; border-bottom: 1px solid #dce3ef; }
+    .day-cell {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: #7a8aa0;
+      border-right: 1px solid #e8ecf4;
+      flex-shrink: 0;
+    }
+    .day-cell.week-start { background: #e6ecf7; font-weight: 600; color: #3a5080; }
+    .day-cell.today { background: #fff3cd; color: #856404; font-weight: 700; }
+
+    .gantt-body { }
+    .gantt-row {
+      display: flex;
+      height: 48px;
+      border-bottom: 1px solid #edf0f5;
+      align-items: center;
+    }
+    .gantt-row:hover { background: #f7f9fc; }
+    .gantt-row.section-row {
+      background: #f0f4fb;
+      height: 32px;
+      border-bottom: 1px solid #dce3ef;
+    }
+    .task-label {
+      min-width: 220px; width: 220px;
+      padding: 0 14px;
+      font-size: 13px;
+      border-right: 1px solid #e0e6f0;
+      flex-shrink: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .task-label.section { font-size: 12px; font-weight: 700; color: #3a5080; text-transform: uppercase; letter-spacing: 0.6px; }
+    .task-label.milestone-label { color: #555; font-style: italic; font-size: 12.5px; }
+
+    .timeline-area { flex: 1; position: relative; height: 100%; }
+    .day-grid { display: flex; height: 100%; position: absolute; top: 0; left: 0; right: 0; }
+    .day-col { flex-shrink: 0; height: 100%; border-right: 1px solid #f0f3f8; }
+    .day-col.week-start { border-right: 1px solid #dce3ef; background: rgba(230,236,247,0.25); }
+    .day-col.today-col { background: rgba(255,220,50,0.1); border-right: 1px solid #ffc107; }
+
+    .gantt-bar {
+      position: absolute;
+      height: 24px;
+      border-radius: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      cursor: default;
+      transition: filter 0.15s;
+    }
+    .gantt-bar:hover { filter: brightness(1.1); }
+
+    .milestone-diamond {
+      position: absolute;
+      width: 14px; height: 14px;
+      transform: translateY(-50%) rotate(45deg);
+      top: 50%;
+      border-radius: 2px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 10;
+    }
+    .milestone-line {
+      position: absolute;
+      width: 2px;
+      top: 0; bottom: 0;
+      z-index: 5;
+      opacity: 0.5;
+    }
+    .milestone-label-top {
+      position: absolute;
+      top: 2px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+      z-index: 20;
+      padding: 2px 5px;
+      border-radius: 3px;
+      color: white;
+    }
+
+    .milestones-section {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+      padding: 24px 28px;
+      margin-bottom: 36px;
+    }
+    .milestones-section h2 { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; border-bottom: 2px solid #e94560; padding-bottom: 8px; display: inline-block; }
+    .milestone-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .milestone-table th { background: #1a1a2e; color: white; padding: 10px 14px; text-align: left; font-size: 12.5px; }
+    .milestone-table td { padding: 10px 14px; border-bottom: 1px solid #edf0f5; }
+    .milestone-table tr:hover td { background: #f7f9fc; }
+    .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 600; }
+    .tag.tbc { background: #fff3cd; color: #856404; }
+    .tag.confirmed { background: #d1e7dd; color: #0a5c36; }
+    .tag.deadline { background: #f8d7da; color: #842029; }
+
+    footer { text-align: center; padding: 20px; font-size: 12px; color: #aaa; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>MSc Motorsport Engineering &mdash; Thesis Timeline</h1>
+  <p>Telemetry-Driven Tyre Thermal &amp; Cold Pressure Recommendation Model for GT3 Motorsport</p>
+  <div class="badges">
+    <span class="badge">Cranfield University</span>
+    <span class="badge">Individual Research Project A25</span>
+    <span class="badge">1 June 2026 &rarr; 31 August 2026</span>
+    <span class="badge">Porsche 992.1 GT3 Cup</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="legend">
+    <span class="legend-title">Legend:</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#4472c4"></span> Research &amp; Scope</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#70ad47"></span> Data &amp; Method</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#ffc000"></span> Implementation</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#ed7d31"></span> Analysis &amp; Writing</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#e94560"></span> Final / Critical</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#7030a0; border-radius:50%"></span> Milestone</span>
+  </div>
+
+  <div class="gantt-wrapper" id="gantt"></div>
+
+  <div class="milestones-section">
+    <h2>Key Deadlines &amp; Reviews</h2>
+    <table class="milestone-table">
+      <thead><tr><th>Event</th><th>Date</th><th>Notes</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Literature Review Chapter Due</td><td>30 Jun 2026</td><td>Chapter submitted before end of June</td><td><span class="tag deadline">Deadline</span></td></tr>
+        <tr><td>Review 1</td><td>29 Jun 2026</td><td>Supervisor progress check</td><td><span class="tag tbc">TBC</span></td></tr>
+        <tr><td>Review 2</td><td>27 Jul 2026</td><td>4 weeks after Review 1</td><td><span class="tag tbc">TBC</span></td></tr>
+        <tr><td>Draft Complete</td><td>10 Aug 2026</td><td>Full draft ready for supervisor review</td><td><span class="tag confirmed">Planned</span></td></tr>
+        <tr><td>Submission Deadline</td><td>31 Aug 2026</td><td>Final thesis submitted</td><td><span class="tag deadline">Deadline</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>Generated for Cranfield University MSc Motorsport Engineering &mdash; June 2026</footer>
+
+<script>
+const START = new Date('2026-06-01');
+const END   = new Date('2026-08-31');
+const TODAY = new Date('2026-06-03');
+const TOTAL_DAYS = Math.round((END - START) / 86400000) + 1;
+const DAY_W = Math.max(11, Math.floor((window.innerWidth - 340) / TOTAL_DAYS));
+
+const tasks = [
+  { section: 'Research & Scope' },
+  { label: 'Refine aim & objectives', start: '2026-06-01', end: '2026-06-07', color: '#4472c4', done: true },
+  { label: 'Literature review',       start: '2026-06-01', end: '2026-06-30', color: '#4472c4' },
+  { section: 'Data & Method' },
+  { label: 'Data audit & preprocessing', start: '2026-06-08', end: '2026-06-28', color: '#70ad47' },
+  { label: 'Method formulation',         start: '2026-06-15', end: '2026-07-12', color: '#70ad47' },
+  { section: 'Implementation' },
+  { label: 'MATLAB / Simulink build',      start: '2026-06-22', end: '2026-07-26', color: '#ffc000' },
+  { label: 'Validation & sensitivity',    start: '2026-07-13', end: '2026-08-09', color: '#ffc000' },
+  { section: 'Analysis & Writing' },
+  { label: 'Results analysis',     start: '2026-07-27', end: '2026-08-16', color: '#ed7d31' },
+  { label: 'Write thesis chapters', start: '2026-07-06', end: '2026-08-23', color: '#ed7d31' },
+  { section: 'Final' },
+  { label: 'Final edits & formatting', start: '2026-08-24', end: '2026-08-31', color: '#e94560' },
+];
+
+const milestones = [
+  { label: 'Lit Review Due', date: '2026-06-30', color: '#e94560' },
+  { label: 'Review 1 (TBC)', date: '2026-06-29', color: '#7030a0' },
+  { label: 'Review 2 (TBC)', date: '2026-07-27', color: '#7030a0' },
+  { label: 'Draft',          date: '2026-08-10', color: '#ed7d31' },
+  { label: 'Submit',         date: '2026-08-31', color: '#e94560' },
+];
+
+function dayOffset(dateStr) {
+  return Math.round((new Date(dateStr) - START) / 86400000);
+}
+
+const gantt = document.getElementById('gantt');
+
+// Header
+const headerRow = document.createElement('div');
+headerRow.className = 'gantt-header-row';
+const taskColH = document.createElement('div');
+taskColH.className = 'task-col';
+taskColH.textContent = 'Task';
+headerRow.appendChild(taskColH);
+
+const timelineColH = document.createElement('div');
+timelineColH.className = 'timeline-col';
+const monthHeaders = document.createElement('div');
+monthHeaders.className = 'month-headers';
+
+const months = [
+  { name: 'June 2026',   days: 30 },
+  { name: 'July 2026',   days: 31 },
+  { name: 'August 2026', days: 31 },
+];
+months.forEach(m => {
+  const mb = document.createElement('div');
+  mb.className = 'month-block';
+  mb.style.width = (m.days * DAY_W) + 'px';
+  mb.style.minWidth = (m.days * DAY_W) + 'px';
+  mb.textContent = m.name;
+  monthHeaders.appendChild(mb);
+});
+timelineColH.appendChild(monthHeaders);
+headerRow.appendChild(timelineColH);
+gantt.appendChild(headerRow);
+
+// Day header
+const dayRow = document.createElement('div');
+dayRow.className = 'day-header-row';
+const taskColD = document.createElement('div');
+taskColD.className = 'task-col';
+taskColD.style.background = '#f0f3f8';
+taskColD.style.borderRight = '1px solid #dce3ef';
+dayRow.appendChild(taskColD);
+
+const dayRowTl = document.createElement('div');
+dayRowTl.style.display = 'flex';
+for (let d = 0; d < TOTAL_DAYS; d++) {
+  const cur = new Date(START); cur.setDate(cur.getDate() + d);
+  const cell = document.createElement('div');
+  cell.className = 'day-cell' + (cur.getDay() === 1 ? ' week-start' : '') + (cur.toDateString() === TODAY.toDateString() ? ' today' : '');
+  cell.style.width = DAY_W + 'px';
+  cell.style.minWidth = DAY_W + 'px';
+  if (DAY_W >= 14) cell.textContent = cur.getDate();
+  else if (cur.getDate() % 7 === 1) cell.textContent = cur.getDate();
+  dayRowTl.appendChild(cell);
+}
+dayRow.appendChild(dayRowTl);
+gantt.appendChild(dayRow);
+
+// Body
+const body = document.createElement('div');
+body.className = 'gantt-body';
+
+tasks.forEach(task => {
+  const row = document.createElement('div');
+  if (task.section) {
+    row.className = 'gantt-row section-row';
+    const lbl = document.createElement('div');
+    lbl.className = 'task-label section';
+    lbl.textContent = task.section;
+    row.appendChild(lbl);
+    const tl = document.createElement('div');
+    tl.className = 'timeline-area';
+    tl.style.background = '#f0f4fb';
+    tl.style.width = (TOTAL_DAYS * DAY_W) + 'px';
+    row.appendChild(tl);
+    body.appendChild(row);
+    return;
+  }
+
+  row.className = 'gantt-row';
+  const lbl = document.createElement('div');
+  lbl.className = 'task-label' + (task.done ? ' done' : '');
+  lbl.textContent = task.label;
+  if (task.done) lbl.style.color = '#999';
+  row.appendChild(lbl);
+
+  const tl = document.createElement('div');
+  tl.className = 'timeline-area';
+  tl.style.position = 'relative';
+  tl.style.width = (TOTAL_DAYS * DAY_W) + 'px';
+  tl.style.minWidth = (TOTAL_DAYS * DAY_W) + 'px';
+
+  // Day grid
+  const grid = document.createElement('div');
+  grid.className = 'day-grid';
+  for (let d = 0; d < TOTAL_DAYS; d++) {
+    const cur = new Date(START); cur.setDate(cur.getDate() + d);
+    const dc = document.createElement('div');
+    dc.className = 'day-col' + (cur.getDay() === 1 ? ' week-start' : '') + (cur.toDateString() === TODAY.toDateString() ? ' today-col' : '');
+    dc.style.width = DAY_W + 'px';
+    dc.style.minWidth = DAY_W + 'px';
+    grid.appendChild(dc);
+  }
+  tl.appendChild(grid);
+
+  // Milestone vertical lines
+  milestones.forEach(m => {
+    const moff = dayOffset(m.date);
+    const mline = document.createElement('div');
+    mline.className = 'milestone-line';
+    mline.style.left = (moff * DAY_W + DAY_W/2) + 'px';
+    mline.style.background = m.color;
+    tl.appendChild(mline);
+  });
+
+  // Bar
+  const soff = dayOffset(task.start);
+  const eoff = dayOffset(task.end);
+  const bar = document.createElement('div');
+  bar.className = 'gantt-bar';
+  bar.style.left = (soff * DAY_W) + 'px';
+  bar.style.width = ((eoff - soff + 1) * DAY_W) + 'px';
+  bar.style.background = task.done ? '#b0bec5' : task.color;
+  const barW = (eoff - soff + 1) * DAY_W;
+  if (barW > 60) bar.textContent = task.label;
+  bar.title = `${task.label}: ${task.start} → ${task.end}`;
+  tl.appendChild(bar);
+
+  row.appendChild(tl);
+  body.appendChild(row);
+});
+
+// Milestone diamonds row
+const mRow = document.createElement('div');
+mRow.className = 'gantt-row';
+mRow.style.height = '50px';
+const mLbl = document.createElement('div');
+mLbl.className = 'task-label milestone-label';
+mLbl.textContent = 'Milestones';
+mRow.appendChild(mLbl);
+const mTl = document.createElement('div');
+mTl.className = 'timeline-area';
+mTl.style.position = 'relative';
+mTl.style.width = (TOTAL_DAYS * DAY_W) + 'px';
+mTl.style.minWidth = (TOTAL_DAYS * DAY_W) + 'px';
+
+milestones.forEach(m => {
+  const off = dayOffset(m.date);
+  const diamond = document.createElement('div');
+  diamond.className = 'milestone-diamond';
+  diamond.style.left = (off * DAY_W + DAY_W/2 - 7) + 'px';
+  diamond.style.background = m.color;
+  diamond.title = `${m.label}: ${m.date}`;
+  mTl.appendChild(diamond);
+
+  const lbl = document.createElement('div');
+  lbl.className = 'milestone-label-top';
+  lbl.style.left = (off * DAY_W + DAY_W/2 - 18) + 'px';
+  lbl.style.background = m.color;
+  lbl.textContent = m.label;
+  mTl.appendChild(lbl);
+});
+
+mRow.appendChild(mTl);
+body.appendChild(mRow);
+gantt.appendChild(body);
+</script>
+</body>
+</html>
