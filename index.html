@@ -12,6 +12,11 @@ header h1{font-size:24px;font-weight:700;margin-bottom:4px;}
 header p{font-size:13px;color:#a8b8d8;margin-top:3px;}
 .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;}
 .badge{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#c8d8f0;font-size:11.5px;padding:3px 11px;border-radius:20px;}
+.sync-bar{background:#0f3460;color:#a8d8ea;font-size:12px;text-align:center;padding:6px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#70ad47;display:inline-block;flex-shrink:0;}
+.sync-dot.saving{background:#ffc000;animation:pulse .7s infinite alternate;}
+.sync-dot.error{background:#e94560;}
+@keyframes pulse{from{opacity:1;}to{opacity:0.3;}}
 .container{padding:28px 40px;}
 .legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;align-items:center;}
 .legend-title{font-size:12.5px;font-weight:700;color:#555;}
@@ -77,7 +82,6 @@ select.editable{cursor:pointer;}
 .add-row-btn:hover{background:#0f3460;}
 .reset-btn{background:none;border:1px solid #ccc;color:#888;padding:7px 14px;border-radius:7px;font-size:12px;cursor:pointer;transition:all .15s;}
 .reset-btn:hover{border-color:#dc3545;color:#dc3545;background:#fde8ea;}
-.saved-badge{font-size:11.5px;color:#0a5c36;background:#d1e7dd;padding:4px 10px;border-radius:20px;font-weight:600;opacity:0;transition:opacity .4s;}
 footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
 </style>
 </head>
@@ -93,6 +97,7 @@ footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
     <span class="badge">Porsche 992.1 GT3 Cup</span>
   </div>
 </header>
+<div class="sync-bar"><span class="sync-dot" id="syncDot"></span><span id="syncMsg">Connecting to database&hellip;</span></div>
 <div class="container">
 <div class="legend">
   <span class="legend-title">Legend &nbsp;</span>
@@ -109,18 +114,15 @@ footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
   <div id="ghead" class="gantt-head"></div>
   <div class="gantt-body">
     <div class="label-col" id="lcol"></div>
-    <div class="scroll-col" id="scol">
-      <div class="tl-inner" id="tinner"></div>
-    </div>
+    <div class="scroll-col" id="scol"><div class="tl-inner" id="tinner"></div></div>
   </div>
 </div>
 <div class="dl-section">
   <div class="dl-header">
     <div>
       <h2>Key Deadlines &amp; Reviews</h2>
-      <p class="dl-note">&#9998; Click any cell to edit &nbsp;&bull;&nbsp; Changes auto-save in your browser &nbsp;&bull;&nbsp; Table sorts by date &nbsp;&bull;&nbsp; Gantt updates instantly</p>
+      <p class="dl-note">&#9998; Click any cell to edit &nbsp;&bull;&nbsp; Changes sync instantly to all viewers &nbsp;&bull;&nbsp; Table sorts by date</p>
     </div>
-    <span class="saved-badge" id="savedBadge">&#10003; Saved</span>
   </div>
   <div class="dl-table-wrap">
     <table class="dl-tbl" id="dlTable">
@@ -136,13 +138,34 @@ footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
 </div>
 <footer>Cranfield University &mdash; MSc Motorsport Engineering &mdash; June 2026</footer>
 
+<!-- Firebase SDKs (compat mode, no bundler needed) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
 <script>
-const STORAGE_KEY = 'thesis_milestones_v1';
+// ---- FIREBASE CONFIG ----
+const firebaseConfig = {
+  apiKey: "AIzaSyC8D7fz-Q6QR9yPV8Jf19fz7keKUUMjtgE",
+  authDomain: "thesis-timeline-712d3.firebaseapp.com",
+  databaseURL: "https://thesis-timeline-712d3-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "thesis-timeline-712d3",
+  storageBucket: "thesis-timeline-712d3.firebasestorage.app",
+  messagingSenderId: "597704919994",
+  appId: "1:597704919994:web:e387b770361de79a18ab83"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const MS_REF = db.ref('milestones');
+
+// ---- CONSTANTS ----
 const GANTT_START = new Date('2026-06-01');
 const GANTT_END   = new Date('2026-08-31');
 const TODAY_DATE  = new Date('2026-06-03');
 const N_DAYS = Math.round((GANTT_END-GANTT_START)/86400000)+1;
 const DW = 18;
+const MONTHS=[{n:'June 2026',days:30},{n:'July 2026',days:31},{n:'August 2026',days:31}];
+const COLOR_MAP={'Deadline':'#e94560','TBC':'#7030a0','Planned':'#ed7d31','Done':'#6c757d'};
+const STATUS_OPTIONS=['TBC','Planned','Deadline','Done'];
 
 const TASKS = [
   {sec:'Research & Scope'},
@@ -160,8 +183,6 @@ const TASKS = [
   {sec:'Final'},
   {label:'Final edits & formatting',  s:'2026-08-24',e:'2026-08-31',color:'#e94560'},
 ];
-const MONTHS=[{n:'June 2026',days:30},{n:'July 2026',days:31},{n:'August 2026',days:31}];
-const COLOR_MAP={'Deadline':'#e94560','TBC':'#7030a0','Planned':'#ed7d31','Done':'#6c757d'};
 
 const DEFAULT_MILESTONES = [
   {label:'Lit Review Due',   date:'2026-06-30',color:'#e94560',status:'Deadline',notes:'Chapter submitted before end of June'},
@@ -173,39 +194,69 @@ const DEFAULT_MILESTONES = [
   {label:'Submit Thesis',    date:'2026-08-31',color:'#e94560',status:'Deadline',notes:'Final thesis submitted'},
 ];
 
-// ---- PERSISTENCE ----
+let milestones = [];
+let isWriting = false; // prevent echo loop
+
+// ---- SYNC STATUS ----
+function setSyncStatus(state, msg){
+  const dot=document.getElementById('syncDot');
+  const txt=document.getElementById('syncMsg');
+  dot.className='sync-dot'+(state==='saving'?' saving':state==='error'?' error':'');
+  txt.textContent=msg;
+}
+
+// ---- SAVE TO FIREBASE ----
 function saveMilestones(){
-  try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(milestones));
-    const badge=document.getElementById('savedBadge');
-    badge.style.opacity='1';
-    setTimeout(()=>badge.style.opacity='0',2000);
-  }catch(e){console.warn('localStorage unavailable',e);}
+  isWriting=true;
+  setSyncStatus('saving','Saving\u2026');
+  MS_REF.set(milestones).then(()=>{
+    setSyncStatus('ok','\u2713 All changes saved \u2014 visible to everyone with this link');
+    setTimeout(()=>isWriting=false, 300);
+  }).catch(err=>{
+    setSyncStatus('error','Save failed: '+err.message);
+    isWriting=false;
+  });
 }
-function loadMilestones(){
-  try{
-    const raw=localStorage.getItem(STORAGE_KEY);
-    if(raw){
-      const parsed=JSON.parse(raw);
-      if(Array.isArray(parsed)&&parsed.length>0) return parsed;
-    }
-  }catch(e){console.warn('Could not load saved data',e);}
-  return JSON.parse(JSON.stringify(DEFAULT_MILESTONES));
-}
+
+// ---- RESET ----
 function resetDefaults(){
-  if(confirm('Reset all deadlines to the original defaults? Your changes will be lost.')){
+  if(confirm('Reset all deadlines to the original defaults? This will update for everyone.')){
     milestones=JSON.parse(JSON.stringify(DEFAULT_MILESTONES));
     saveMilestones();
-    rebuildAll();
   }
 }
 
-let milestones = loadMilestones();
+// ---- FIREBASE REAL-TIME LISTENER ----
+// This fires on page load AND whenever anyone else saves a change
+MS_REF.on('value', snapshot=>{
+  if(isWriting) return; // ignore echo of our own write
+  const data = snapshot.val();
+  if(data && Array.isArray(data) && data.length>0){
+    milestones = data;
+    setSyncStatus('ok','\u2713 Live \u2014 changes sync to all viewers instantly');
+  } else {
+    // First time — seed defaults into Firebase
+    milestones = JSON.parse(JSON.stringify(DEFAULT_MILESTONES));
+    MS_REF.set(milestones);
+    setSyncStatus('ok','\u2713 Live \u2014 changes sync to all viewers instantly');
+  }
+  rebuildAll();
+  // Scroll to today only on first load
+  if(!window._scrolled){
+    window._scrolled=true;
+    setTimeout(()=>{
+      const sc=document.querySelector('.scroll-col');
+      if(sc) sc.scrollLeft=Math.max(0,Math.round((TODAY_DATE-GANTT_START)/86400000)*DW-80);
+    },100);
+  }
+});
+
+MS_REF.on('value', ()=>{}, err=>setSyncStatus('error','Connection error: '+err.message));
 
 // ---- HELPERS ----
 function doff(str){if(!str)return -1;return Math.round((new Date(str)-GANTT_START)/86400000);}
 function fmt(str){if(!str)return '\u2014';return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
-function toInputDate(str){if(!str)return '';return new Date(str).toISOString().slice(0,10);}
+function toInputDate(str){if(!str)return '';try{return new Date(str).toISOString().slice(0,10);}catch(e){return '';}}
 function tagClass(s){return({'TBC':'tbc','Planned':'plan','Deadline':'dl','Done':'done'}[s]||'plan');}
 function msColor(m){return m.color||COLOR_MAP[m.status]||'#7030a0';}
 
@@ -224,7 +275,6 @@ function buildGantt(){
   tinner.style.width=totalW+'px';
   const active=milestones.filter(m=>m.date&&doff(m.date)>=0&&doff(m.date)<N_DAYS);
 
-  // Month header
   const mrow=document.createElement('div');mrow.className='head-row';
   const mlbl=document.createElement('div');mlbl.className='head-label';mlbl.textContent='Task';mrow.appendChild(mlbl);
   const mhs=document.createElement('div');mhs.className='head-scroll';mhs.id='hscroll';
@@ -232,41 +282,19 @@ function buildGantt(){
   MONTHS.forEach(m=>{const mc=document.createElement('div');mc.className='month-cell';mc.style.width=(m.days*DW)+'px';mc.style.minWidth=(m.days*DW)+'px';mc.textContent=m.n;mstrip.appendChild(mc);});
   mhs.appendChild(mstrip);mrow.appendChild(mhs);ghead.appendChild(mrow);
 
-  // Day header
   const drow=document.createElement('div');drow.className='head-row';
   const dlbl=document.createElement('div');dlbl.className='head-label';dlbl.style.height='24px';dlbl.style.background='#f0f3f8';drow.appendChild(dlbl);
   const dhs=document.createElement('div');dhs.className='head-scroll';dhs.id='dscroll';
   const dstrip=document.createElement('div');dstrip.className='day-strip';
-  for(let d=0;d<N_DAYS;d++){
-    const cur=new Date(GANTT_START);cur.setDate(cur.getDate()+d);
-    const dc=document.createElement('div');let cls='day-cell';
-    if(cur.getDay()===1)cls+=' ws';
-    if(cur.toDateString()===TODAY_DATE.toDateString())cls+=' td';
-    dc.className=cls;dc.textContent=cur.getDate();dstrip.appendChild(dc);
-  }
+  for(let d=0;d<N_DAYS;d++){const cur=new Date(GANTT_START);cur.setDate(cur.getDate()+d);const dc=document.createElement('div');let cls='day-cell';if(cur.getDay()===1)cls+=' ws';if(cur.toDateString()===TODAY_DATE.toDateString())cls+=' td';dc.className=cls;dc.textContent=cur.getDate();dstrip.appendChild(dc);}
   dhs.appendChild(dstrip);drow.appendChild(dhs);ghead.appendChild(drow);
 
-  function makeGrid(rowEl,rowH){
-    for(let d=0;d<N_DAYS;d++){
-      const cur=new Date(GANTT_START);cur.setDate(cur.getDate()+d);
-      const dc=document.createElement('div');let cls='dcell';
-      if(cur.getDay()===1)cls+=' ws';
-      if(cur.toDateString()===TODAY_DATE.toDateString())cls+=' td';
-      dc.className=cls;dc.style.height=rowH+'px';rowEl.appendChild(dc);
-    }
-  }
-  function addMlines(rowEl){
-    active.forEach(m=>{
-      const ml=document.createElement('div');ml.className='mline';
-      ml.style.left=(doff(m.date)*DW+DW/2-1)+'px';ml.style.background=msColor(m);
-      rowEl.appendChild(ml);
-    });
-  }
+  function makeGrid(rowEl,rowH){for(let d=0;d<N_DAYS;d++){const cur=new Date(GANTT_START);cur.setDate(cur.getDate()+d);const dc=document.createElement('div');let cls='dcell';if(cur.getDay()===1)cls+=' ws';if(cur.toDateString()===TODAY_DATE.toDateString())cls+=' td';dc.className=cls;dc.style.height=rowH+'px';rowEl.appendChild(dc);}}
+  function addMlines(rowEl){active.forEach(m=>{const ml=document.createElement('div');ml.className='mline';ml.style.left=(doff(m.date)*DW+DW/2-1)+'px';ml.style.background=msColor(m);rowEl.appendChild(ml);});}
 
   TASKS.forEach(task=>{
     const lrow=document.createElement('div');lrow.className='lrow'+(task.sec?' sec':'');lrow.textContent=task.sec||task.label;lcol.appendChild(lrow);
-    const trow=document.createElement('div');trow.className='trow'+(task.sec?' sec':'');
-    const rh=task.sec?30:48;trow.style.width=totalW+'px';
+    const trow=document.createElement('div');trow.className='trow'+(task.sec?' sec':'');const rh=task.sec?30:48;trow.style.width=totalW+'px';
     makeGrid(trow,rh);if(!task.sec)addMlines(trow);
     if(!task.sec){
       const so=doff(task.s),eo=doff(task.e);
@@ -281,28 +309,22 @@ function buildGantt(){
     tinner.appendChild(trow);
   });
 
-  // Milestone row
   const mlrow=document.createElement('div');mlrow.className='lrow ms';mlrow.textContent='\u25C6 Milestones';lcol.appendChild(mlrow);
   const mtrow=document.createElement('div');mtrow.className='trow ms';mtrow.style.width=totalW+'px';
   makeGrid(mtrow,60);
   active.forEach(m=>{
     const off=doff(m.date);
-    const d=document.createElement('div');d.className='diamond';
-    d.style.left=(off*DW+DW/2-8)+'px';d.style.background=msColor(m);
+    const d=document.createElement('div');d.className='diamond';d.style.left=(off*DW+DW/2-8)+'px';d.style.background=msColor(m);
     d.addEventListener('mouseenter',e=>showTip(e,`<b>${m.label}</b><br>${fmt(m.date)}${m.notes?'<br>'+m.notes:''}${m.status?'<br><i>'+m.status+'</i>':''}`));
-    d.addEventListener('mouseleave',hideTip);
-    mtrow.appendChild(d);
-    const ml=document.createElement('div');ml.className='mlabel';
-    ml.style.left=(off*DW+DW/2-18)+'px';ml.style.background=msColor(m);ml.textContent=m.label;
+    d.addEventListener('mouseleave',hideTip);mtrow.appendChild(d);
+    const ml=document.createElement('div');ml.className='mlabel';ml.style.left=(off*DW+DW/2-18)+'px';ml.style.background=msColor(m);ml.textContent=m.label;
     mtrow.appendChild(ml);
   });
   tinner.appendChild(mtrow);
 
-  // Scroll sync
   const scol=document.getElementById('scol');
-  const hscroll=document.getElementById('hscroll');
-  const dscroll=document.getElementById('dscroll');
   const newScol=scol.cloneNode(true);scol.parentNode.replaceChild(newScol,scol);newScol.appendChild(tinner);
+  const hscroll=document.getElementById('hscroll'),dscroll=document.getElementById('dscroll');
   newScol.addEventListener('scroll',()=>{hscroll.scrollLeft=newScol.scrollLeft;dscroll.scrollLeft=newScol.scrollLeft;});
   let isDrag=false,sx,sl;
   newScol.addEventListener('mousedown',e=>{isDrag=true;sx=e.pageX-newScol.offsetLeft;sl=newScol.scrollLeft;});
@@ -311,8 +333,7 @@ function buildGantt(){
   newScol.addEventListener('mouseleave',()=>isDrag=false);
 }
 
-// ---- DEADLINES TABLE ----
-const STATUS_OPTIONS=['TBC','Planned','Deadline','Done'];
+// ---- TABLE ----
 function sortMilestones(){milestones.sort((a,b)=>{if(!a.date)return 1;if(!b.date)return -1;return new Date(a.date)-new Date(b.date);});}
 
 function renderTable(){
@@ -320,34 +341,19 @@ function renderTable(){
   const tbody=document.getElementById('dlBody');tbody.innerHTML='';
   milestones.forEach((m,i)=>{
     const tr=document.createElement('tr');
-    // Name
-    const tdN=document.createElement('td');const inN=document.createElement('input');
-    inN.className='editable';inN.type='text';inN.value=m.label||'';
-    inN.addEventListener('change',()=>{milestones[i].label=inN.value;saveMilestones();rebuildAll();});
-    tdN.appendChild(inN);tr.appendChild(tdN);
-    // Date
-    const tdD=document.createElement('td');const inD=document.createElement('input');
-    inD.className='editable';inD.type='date';inD.value=toInputDate(m.date)||'';
-    inD.addEventListener('change',()=>{milestones[i].date=inD.value;saveMilestones();rebuildAll();});
-    tdD.appendChild(inD);tr.appendChild(tdD);
-    // Notes
-    const tdNo=document.createElement('td');const inNo=document.createElement('input');
-    inNo.className='editable';inNo.type='text';inNo.value=m.notes||'';inNo.placeholder='Add a note...';
-    inNo.addEventListener('change',()=>{milestones[i].notes=inNo.value;saveMilestones();});
-    tdNo.appendChild(inNo);tr.appendChild(tdNo);
-    // Status
-    const tdS=document.createElement('td');
-    const tagSpan=document.createElement('span');tagSpan.className='tag '+tagClass(m.status);
-    const sel=document.createElement('select');sel.className='editable';
-    sel.style.cssText='background:transparent;border:none;font:inherit;font-weight:700;color:inherit;';
+    const tdN=document.createElement('td');const inN=document.createElement('input');inN.className='editable';inN.type='text';inN.value=m.label||'';
+    inN.addEventListener('change',()=>{milestones[i].label=inN.value;saveMilestones();rebuildAll();});tdN.appendChild(inN);tr.appendChild(tdN);
+    const tdD=document.createElement('td');const inD=document.createElement('input');inD.className='editable';inD.type='date';inD.value=toInputDate(m.date)||'';
+    inD.addEventListener('change',()=>{milestones[i].date=inD.value;saveMilestones();rebuildAll();});tdD.appendChild(inD);tr.appendChild(tdD);
+    const tdNo=document.createElement('td');const inNo=document.createElement('input');inNo.className='editable';inNo.type='text';inNo.value=m.notes||'';inNo.placeholder='Add a note...';
+    inNo.addEventListener('change',()=>{milestones[i].notes=inNo.value;saveMilestones();});tdNo.appendChild(inNo);tr.appendChild(tdNo);
+    const tdS=document.createElement('td');const tagSpan=document.createElement('span');tagSpan.className='tag '+tagClass(m.status);
+    const sel=document.createElement('select');sel.className='editable';sel.style.cssText='background:transparent;border:none;font:inherit;font-weight:700;color:inherit;';
     STATUS_OPTIONS.forEach(opt=>{const o=document.createElement('option');o.value=opt;o.textContent=opt;if(opt===m.status)o.selected=true;sel.appendChild(o);});
     sel.addEventListener('change',()=>{milestones[i].status=sel.value;milestones[i].color=COLOR_MAP[sel.value];tagSpan.className='tag '+tagClass(sel.value);saveMilestones();rebuildAll();});
     tagSpan.appendChild(sel);tdS.appendChild(tagSpan);tr.appendChild(tdS);
-    // Delete
-    const tdDel=document.createElement('td');const btn=document.createElement('button');
-    btn.className='btn-del';btn.title='Remove';btn.innerHTML='&#10005;';
-    btn.addEventListener('click',()=>{milestones.splice(i,1);saveMilestones();rebuildAll();});
-    tdDel.appendChild(btn);tr.appendChild(tdDel);
+    const tdDel=document.createElement('td');const btn=document.createElement('button');btn.className='btn-del';btn.title='Remove';btn.innerHTML='&#10005;';
+    btn.addEventListener('click',()=>{milestones.splice(i,1);saveMilestones();rebuildAll();});tdDel.appendChild(btn);tr.appendChild(tdDel);
     tbody.appendChild(tr);
   });
 }
@@ -361,14 +367,6 @@ function addRow(){
 }
 
 function rebuildAll(){renderTable();buildGantt();}
-
-// ---- INIT ----
-buildGantt();
-renderTable();
-window.addEventListener('load',()=>{
-  const sc=document.querySelector('.scroll-col');
-  if(sc) sc.scrollLeft=Math.max(0,Math.round((TODAY_DATE-GANTT_START)/86400000)*DW-80);
-});
 </script>
 </body>
 </html>
