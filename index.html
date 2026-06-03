@@ -20,170 +20,86 @@ header p{font-size:13px;color:#a8b8d8;margin-top:3px;}
 
 .container{padding:28px 40px;}
 
-.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;align-items:center;}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;align-items:center;}
 .legend-title{font-size:12.5px;font-weight:700;color:#555;}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#444;}
 .legend-dot{width:13px;height:13px;border-radius:3px;flex-shrink:0;}
 
-/* ── GANTT SHELL ── */
-.gantt-shell{
-  background:white;
-  border-radius:12px;
-  box-shadow:0 2px 20px rgba(0,0,0,0.08);
-  overflow:hidden;
-  margin-bottom:32px;
-  display:flex;
-  flex-direction:column;
-}
+.scroll-hint{text-align:center;font-size:12px;color:#aaa;margin-bottom:10px;}
 
-/* ── FROZEN LEFT LABEL WIDTH ── */
+/* GANTT SHELL */
+.gantt-shell{background:white;border-radius:12px;box-shadow:0 2px 20px rgba(0,0,0,0.08);overflow:hidden;margin-bottom:32px;display:flex;flex-direction:column;}
 :root{--lw:210px;--dw:18px;}
-
-/* ── TOP HEADER (months + days) ── */
-.gantt-head{
-  display:flex;
-  flex-direction:column;
-  position:sticky;
-  top:0;
-  z-index:30;
-  background:white;
-  border-bottom:2px solid #dce3ef;
-}
+.gantt-head{display:flex;flex-direction:column;position:sticky;top:0;z-index:30;background:white;border-bottom:2px solid #dce3ef;}
 .head-row{display:flex;}
-.head-label{
-  min-width:var(--lw);width:var(--lw);
-  background:#1a1a2e;color:white;
-  font-size:12.5px;font-weight:700;
-  display:flex;align-items:center;padding:0 14px;
-  flex-shrink:0;
-  border-right:2px solid rgba(255,255,255,0.15);
-}
+.head-label{min-width:var(--lw);width:var(--lw);background:#1a1a2e;color:white;font-size:12.5px;font-weight:700;display:flex;align-items:center;padding:0 14px;flex-shrink:0;border-right:2px solid rgba(255,255,255,0.15);}
 .head-scroll{overflow:hidden;flex:1;}
 .month-strip{display:flex;height:36px;background:#1a1a2e;}
-.month-cell{
-  display:flex;align-items:center;justify-content:center;
-  font-size:12.5px;font-weight:700;color:white;
-  border-right:2px solid rgba(255,255,255,0.15);
-  letter-spacing:0.4px;
-  flex-shrink:0;
-}
+.month-cell{display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:white;border-right:2px solid rgba(255,255,255,0.15);letter-spacing:0.4px;flex-shrink:0;}
 .day-strip{display:flex;height:24px;background:#f0f3f8;}
-.day-cell{
-  display:flex;align-items:center;justify-content:center;
-  font-size:9.5px;color:#7a8aa0;
-  border-right:1px solid #e4e9f2;
-  flex-shrink:0;
-  width:var(--dw);min-width:var(--dw);
-}
+.day-cell{display:flex;align-items:center;justify-content:center;font-size:9.5px;color:#7a8aa0;border-right:1px solid #e4e9f2;flex-shrink:0;width:var(--dw);min-width:var(--dw);}
 .day-cell.ws{background:#e6ecf7;color:#3a5080;font-weight:700;}
 .day-cell.td{background:#fff3cd;color:#856404;font-weight:700;}
-
-/* ── BODY ── */
-.gantt-body{display:flex;overflow-y:auto;max-height:520px;}
-.label-col{
-  min-width:var(--lw);width:var(--lw);
-  flex-shrink:0;
-  border-right:2px solid #dce3ef;
-  background:white;
-  position:sticky;left:0;z-index:20;
-}
-.lrow{
-  height:48px;display:flex;align-items:center;
-  padding:0 14px;
-  border-bottom:1px solid #edf0f5;
-  font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
+.gantt-body{display:flex;overflow-y:auto;max-height:530px;}
+.label-col{min-width:var(--lw);width:var(--lw);flex-shrink:0;border-right:2px solid #dce3ef;background:white;position:sticky;left:0;z-index:20;}
+.lrow{height:48px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid #edf0f5;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lrow.sec{height:30px;background:#eef2fa;font-size:11px;font-weight:800;color:#3a5080;text-transform:uppercase;letter-spacing:0.6px;border-bottom:1px solid #d0d9ec;}
-.lrow.ms{height:54px;color:#555;font-style:italic;font-size:12px;}
-
+.lrow.ms{height:60px;color:#555;font-style:italic;font-size:12px;}
 .scroll-col{overflow-x:auto;flex:1;cursor:grab;scroll-behavior:smooth;}
 .scroll-col:active{cursor:grabbing;}
 .tl-inner{position:relative;display:inline-flex;flex-direction:column;}
-
-.trow{
-  height:48px;display:flex;align-items:center;
-  position:relative;
-  border-bottom:1px solid #edf0f5;
-}
+.trow{height:48px;display:flex;align-items:center;position:relative;border-bottom:1px solid #edf0f5;}
 .trow:hover{background:#f7f9fc;}
 .trow.sec{height:30px;background:#eef2fa;border-bottom:1px solid #d0d9ec;}
-.trow.ms{height:54px;}
-
+.trow.ms{height:60px;}
 .dcell{width:var(--dw);min-width:var(--dw);height:100%;flex-shrink:0;border-right:1px solid #f0f3f8;}
 .dcell.ws{background:rgba(230,236,247,0.3);border-right:1px solid #dce3ef;}
 .dcell.td{background:rgba(255,220,50,0.12);border-right:2px solid #ffc107;}
-
-.bar{
-  position:absolute;
-  height:26px;top:50%;transform:translateY(-50%);
-  border-radius:5px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10.5px;font-weight:700;color:white;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  padding:0 8px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.15);
-  z-index:10;
-  transition:filter .15s, transform .15s;
-  cursor:pointer;
-}
+.bar{position:absolute;height:26px;top:50%;transform:translateY(-50%);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 8px;box-shadow:0 2px 8px rgba(0,0,0,0.15);z-index:10;transition:filter .15s,transform .15s;cursor:pointer;}
 .bar:hover{filter:brightness(1.12);transform:translateY(-50%) scaleY(1.08);}
-
-/* Milestone vertical line through every row */
-.mline{position:absolute;width:2px;top:0;bottom:0;z-index:8;pointer-events:none;opacity:0.35;}
-
-/* Milestone row diamonds */
-.diamond{
-  position:absolute;width:16px;height:16px;
-  border-radius:2px;
-  transform:translateY(-50%) rotate(45deg);
-  top:50%;z-index:15;
-  box-shadow:0 2px 6px rgba(0,0,0,0.25);
-  cursor:pointer;
-}
-.diamond:hover{transform:translateY(-50%) rotate(45deg) scale(1.3);}
-.mlabel{
-  position:absolute;top:4px;
-  font-size:9.5px;font-weight:800;
-  white-space:nowrap;z-index:20;
-  padding:2px 5px;border-radius:3px;color:white;
-  pointer-events:none;
-}
+.mline{position:absolute;width:2px;top:0;bottom:0;z-index:8;pointer-events:none;opacity:0.4;}
+.diamond{position:absolute;width:16px;height:16px;border-radius:2px;transform:translateY(-50%) rotate(45deg);top:50%;z-index:15;box-shadow:0 2px 6px rgba(0,0,0,0.25);cursor:pointer;transition:transform .15s;}
+.diamond:hover{transform:translateY(-50%) rotate(45deg) scale(1.35);}
+.mlabel{position:absolute;top:5px;font-size:9.5px;font-weight:800;white-space:nowrap;z-index:20;padding:2px 5px;border-radius:3px;color:white;pointer-events:none;}
 
 /* Tooltip */
-.tip{
-  display:none;position:fixed;
-  background:#1a1a2e;color:white;
-  font-size:12px;padding:7px 12px;
-  border-radius:7px;box-shadow:0 4px 16px rgba(0,0,0,0.25);
-  z-index:9999;pointer-events:none;
-  max-width:240px;line-height:1.5;
-}
+.tip{display:none;position:fixed;background:#1a1a2e;color:white;font-size:12px;padding:8px 13px;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,0.28);z-index:9999;pointer-events:none;max-width:260px;line-height:1.6;}
 
-/* Deadlines table */
-.dl-section{
-  background:white;border-radius:12px;
-  box-shadow:0 2px 20px rgba(0,0,0,0.07);
-  padding:22px 28px;margin-bottom:32px;
-}
-.dl-section h2{font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:14px;border-bottom:2px solid #e94560;padding-bottom:7px;display:inline-block;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-th{background:#1a1a2e;color:white;padding:9px 14px;text-align:left;font-size:12px;}
-td{padding:9px 14px;border-bottom:1px solid #edf0f5;}
-tr:hover td{background:#f7f9fc;}
-.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+/* EDITABLE DEADLINES */
+.dl-section{background:white;border-radius:12px;box-shadow:0 2px 20px rgba(0,0,0,0.07);padding:24px 28px;margin-bottom:32px;}
+.dl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.dl-header h2{font-size:15px;font-weight:700;color:#1a1a2e;border-bottom:2px solid #e94560;padding-bottom:7px;display:inline-block;}
+.dl-note{font-size:12px;color:#888;font-style:italic;margin-top:4px;}
+
+.dl-table-wrap{overflow-x:auto;}
+table.dl-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+table.dl-tbl th{background:#1a1a2e;color:white;padding:9px 14px;text-align:left;font-size:12px;white-space:nowrap;}
+table.dl-tbl td{padding:7px 10px;border-bottom:1px solid #edf0f5;vertical-align:middle;}
+table.dl-tbl tr:hover td{background:#f7f9fc;}
+
+/* editable cells */
+.editable{border:none;background:transparent;font-size:13px;font-family:inherit;color:#1a1a2e;width:100%;min-width:80px;outline:none;cursor:pointer;}
+.editable:focus{background:#f0f6ff;border-radius:4px;cursor:text;padding:2px 4px;}
+input[type=date].editable{min-width:120px;}
+select.editable{cursor:pointer;}
+
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
 .tag.tbc{background:#fff3cd;color:#856404;}
 .tag.plan{background:#d1e7dd;color:#0a5c36;}
 .tag.dl{background:#f8d7da;color:#842029;}
+.tag.done{background:#e2e3e5;color:#383d41;}
 
-/* Scroll hint */
-.scroll-hint{text-align:center;font-size:12px;color:#aaa;margin-bottom:8px;}
+.btn-del{background:none;border:none;color:#dc3545;font-size:15px;cursor:pointer;padding:2px 6px;border-radius:4px;transition:background .15s;line-height:1;}
+.btn-del:hover{background:#fde8ea;}
+
+.add-row-btn{margin-top:12px;background:#1a1a2e;color:white;border:none;padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;}
+.add-row-btn:hover{background:#0f3460;}
+
 footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
 </style>
 </head>
 <body>
-
 <div class="tip" id="tip"></div>
-
 <header>
   <h1>MSc Motorsport Engineering &mdash; Thesis Timeline</h1>
   <p>Telemetry-Driven Tyre Thermal &amp; Cold Pressure Recommendation Model for GT3 Motorsport</p>
@@ -208,12 +124,10 @@ footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
   <span class="legend-item"><span class="legend-dot" style="background:#ffc107;border-radius:50%"></span>Today</span>
 </div>
 
-<p class="scroll-hint">&larr; Scroll the timeline horizontally to see all months &rarr; &nbsp;|&nbsp; Hover over bars for details</p>
+<p class="scroll-hint">&larr; Scroll the timeline horizontally to see all months &rarr; &nbsp;|&nbsp; Hover bars &amp; diamonds for details</p>
 
 <div class="gantt-shell">
-  <!-- sticky header built by JS -->
   <div id="ghead" class="gantt-head"></div>
-  <!-- scrollable body -->
   <div class="gantt-body">
     <div class="label-col" id="lcol"></div>
     <div class="scroll-col" id="scol">
@@ -222,29 +136,35 @@ footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
   </div>
 </div>
 
+<!-- EDITABLE DEADLINES -->
 <div class="dl-section">
-  <h2>Key Deadlines &amp; Reviews</h2>
-  <table>
-    <thead><tr><th>Event</th><th>Date</th><th>Notes</th><th>Status</th></tr></thead>
-    <tbody>
-      <tr><td>Literature Review Chapter Due</td><td>30 Jun 2026</td><td>Chapter submitted before end of June</td><td><span class="tag dl">Deadline</span></td></tr>
-      <tr><td>Review 1</td><td>29 Jun 2026</td><td>Supervisor progress check</td><td><span class="tag tbc">TBC</span></td></tr>
-      <tr><td>Review 2</td><td>27 Jul 2026</td><td>4 weeks after Review 1</td><td><span class="tag tbc">TBC</span></td></tr>
-      <tr><td>Draft Complete</td><td>10 Aug 2026</td><td>Full draft ready for supervisor review</td><td><span class="tag plan">Planned</span></td></tr>
-      <tr><td>Submission Deadline</td><td>31 Aug 2026</td><td>Final thesis submitted</td><td><span class="tag dl">Deadline</span></td></tr>
-    </tbody>
-  </table>
+  <div class="dl-header">
+    <div>
+      <h2>Key Deadlines &amp; Reviews</h2>
+      <p class="dl-note">&#9998; Click any cell to edit &nbsp;|&nbsp; Changes instantly update the Gantt chart &nbsp;|&nbsp; Table auto-sorts by date</p>
+    </div>
+  </div>
+  <div class="dl-table-wrap">
+    <table class="dl-tbl" id="dlTable">
+      <thead><tr><th>Event</th><th>Date</th><th>Notes</th><th>Status</th><th style="width:36px"></th></tr></thead>
+      <tbody id="dlBody"></tbody>
+    </table>
+  </div>
+  <button class="add-row-btn" onclick="addRow()">&#43; Add deadline / event</button>
 </div>
 
 </div>
 <footer>Cranfield University &mdash; MSc Motorsport Engineering &mdash; June 2026</footer>
 
 <script>
-const S  = new Date('2026-06-01');
-const E  = new Date('2026-08-31');
-const TD = new Date('2026-06-03');
-const N  = Math.round((E-S)/86400000)+1; // 92 days
-const DW = 18; // px per day — fixed wide enough to read
+// ============================================================
+// DATA
+// ============================================================
+const GANTT_START = new Date('2026-06-01');
+const GANTT_END   = new Date('2026-08-31');
+const TODAY_DATE  = new Date('2026-06-03');
+const N_DAYS = Math.round((GANTT_END - GANTT_START)/86400000)+1;
+const DW = 18; // px per day
 
 const TASKS = [
   {sec:'Research & Scope'},
@@ -263,155 +183,298 @@ const TASKS = [
   {label:'Final edits & formatting',  s:'2026-08-24',e:'2026-08-31',color:'#e94560'},
 ];
 
-const MS = [
-  {label:'Lit Review Due',date:'2026-06-30',color:'#e94560'},
-  {label:'Review 1 (TBC)',date:'2026-06-29',color:'#7030a0'},
-  {label:'Review 2 (TBC)',date:'2026-07-27',color:'#7030a0'},
-  {label:'Draft',        date:'2026-08-10',color:'#ed7d31'},
-  {label:'Submit',       date:'2026-08-31',color:'#e94560'},
-];
-
 const MONTHS = [{n:'June 2026',days:30},{n:'July 2026',days:31},{n:'August 2026',days:31}];
 
-function doff(str){return Math.round((new Date(str)-S)/86400000);}
-function fmt(str){const d=new Date(str);return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+// Milestone data — driven by the editable table
+let milestones = [
+  {label:'Lit Review Due', date:'2026-06-30', color:'#e94560',  status:'Deadline'},
+  {label:'Review 1',       date:'2026-06-29', color:'#7030a0',  status:'TBC',   notes:'Supervisor progress check'},
+  {label:'Review 2',       date:'2026-07-27', color:'#7030a0',  status:'TBC',   notes:'4 weeks after Review 1'},
+  {label:'Poster Submission', date:'2026-08-20', color:'#0097a7', status:'TBC',  notes:'Submit poster to Canvas as PDF'},
+  {label:'Oral Viva',      date:'2026-08-28', color:'#c0392b',  status:'TBC',   notes:'10-min presentation + Q&A, two academic staff'},
+  {label:'Draft Complete', date:'2026-08-10', color:'#ed7d31',  status:'Planned',notes:'Full draft ready for supervisor'},
+  {label:'Submit Thesis',  date:'2026-08-31', color:'#e94560',  status:'Deadline',notes:'Final thesis submitted'},
+];
 
-// ── BUILD STICKY HEADER ──
-const ghead = document.getElementById('ghead');
-
-// Month row
-const mrow = document.createElement('div'); mrow.className='head-row';
-const mlbl = document.createElement('div'); mlbl.className='head-label'; mlbl.textContent='Task';
-mrow.appendChild(mlbl);
-const mhs = document.createElement('div'); mhs.className='head-scroll'; mhs.id='hscroll';
-const mstrip = document.createElement('div'); mstrip.className='month-strip';
-MONTHS.forEach(m=>{
-  const mc=document.createElement('div'); mc.className='month-cell';
-  mc.style.width=(m.days*DW)+'px'; mc.style.minWidth=(m.days*DW)+'px';
-  mc.textContent=m.n; mstrip.appendChild(mc);
-});
-mhs.appendChild(mstrip); mrow.appendChild(mhs); ghead.appendChild(mrow);
-
-// Day row
-const drow=document.createElement('div'); drow.className='head-row';
-const dlbl=document.createElement('div'); dlbl.className='head-label'; dlbl.style.height='24px'; dlbl.style.background='#f0f3f8';
-drow.appendChild(dlbl);
-const dhs=document.createElement('div'); dhs.className='head-scroll'; dhs.id='dscroll';
-const dstrip=document.createElement('div'); dstrip.className='day-strip';
-for(let d=0;d<N;d++){
-  const cur=new Date(S); cur.setDate(cur.getDate()+d);
-  const dc=document.createElement('div');
-  let cls='day-cell';
-  if(cur.getDay()===1)cls+=' ws';
-  if(cur.toDateString()===TD.toDateString())cls+=' td';
-  dc.className=cls; dc.textContent=cur.getDate();
-  dstrip.appendChild(dc);
+// ============================================================
+// HELPERS
+// ============================================================
+function doff(str){
+  if(!str) return -1;
+  return Math.round((new Date(str)-GANTT_START)/86400000);
 }
-dhs.appendChild(dstrip); drow.appendChild(dhs); ghead.appendChild(drow);
-
-// ── BUILD BODY ──
-const lcol  = document.getElementById('lcol');
-const tinner= document.getElementById('tinner');
-const scol  = document.getElementById('scol');
-
-const totalW = N*DW;
-tinner.style.width=totalW+'px';
-
-function makeGrid(rowEl,rowH){
-  for(let d=0;d<N;d++){
-    const cur=new Date(S); cur.setDate(cur.getDate()+d);
-    const dc=document.createElement('div');
-    let cls='dcell';
-    if(cur.getDay()===1)cls+=' ws';
-    if(cur.toDateString()===TD.toDateString())cls+=' td';
-    dc.className=cls; dc.style.height=rowH+'px';
-    rowEl.appendChild(dc);
-  }
+function fmt(str){
+  if(!str) return '—';
+  const d=new Date(str);
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+}
+function toInputDate(str){
+  if(!str) return '';
+  const d=new Date(str);
+  return d.toISOString().slice(0,10);
+}
+function tagClass(s){
+  const m={'TBC':'tbc','Planned':'plan','Deadline':'dl','Done':'done'};
+  return m[s]||'plan';
 }
 
-function addMlines(rowEl,rowH){
-  MS.forEach(m=>{
-    const off=doff(m.date);
-    const ml=document.createElement('div'); ml.className='mline';
-    ml.style.left=(off*DW+DW/2-1)+'px';
-    ml.style.background=m.color;
-    ml.style.height=rowH+'px';
-    rowEl.appendChild(ml);
-  });
+// Milestone colors by status/type — deterministic
+const COLOR_MAP = {
+  'Deadline':'#e94560','TBC':'#7030a0','Planned':'#ed7d31','Done':'#6c757d'
+};
+function msColor(m){
+  // keep explicit color if set, else map from status
+  return m.color || COLOR_MAP[m.status] || '#7030a0';
 }
 
-const tip=document.getElementById('tip');
-function showTip(e,html){tip.innerHTML=html;tip.style.display='block';moveTip(e);}
+// ============================================================
+// GANTT BUILDER
+// ============================================================
+const tip = document.getElementById('tip');
+function showTip(e,html){tip.innerHTML=html;tip.style.display='block';}
 function moveTip(e){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+14)+'px';}
 function hideTip(){tip.style.display='none';}
 document.addEventListener('mousemove',moveTip);
 
-TASKS.forEach(task=>{
-  // Label
-  const lrow=document.createElement('div');
-  lrow.className='lrow'+(task.sec?' sec':'');
-  lrow.textContent=task.sec||task.label;
-  lcol.appendChild(lrow);
+function buildGantt(){
+  const ghead  = document.getElementById('ghead');
+  const lcol   = document.getElementById('lcol');
+  const tinner = document.getElementById('tinner');
+  ghead.innerHTML='';
+  lcol.innerHTML='';
+  tinner.innerHTML='';
 
-  // Timeline row
-  const trow=document.createElement('div');
-  trow.className='trow'+(task.sec?' sec':'');
-  const rh=task.sec?30:48;
-  trow.style.width=totalW+'px';
-  makeGrid(trow,rh);
-  if(!task.sec) addMlines(trow,rh);
+  const totalW = N_DAYS*DW;
+  tinner.style.width=totalW+'px';
 
-  if(!task.sec){
-    const so=doff(task.s), eo=doff(task.e);
-    const bar=document.createElement('div'); bar.className='bar';
-    bar.style.left=(so*DW)+'px';
-    bar.style.width=((eo-so+1)*DW)+'px';
-    bar.style.background=task.done?'#aab4c0':task.color;
-    if((eo-so+1)*DW>55) bar.textContent=task.label;
-    bar.addEventListener('mouseenter',e=>showTip(e,`<b>${task.label}</b><br>${fmt(task.s)} &rarr; ${fmt(task.e)}<br>${eo-so+1} days${task.done?' &nbsp;&#10003; Done':''}`) );
-    bar.addEventListener('mouseleave',hideTip);
-    trow.appendChild(bar);
+  // Get milestones that have valid dates within range
+  const activeMilestones = milestones
+    .filter(m=>m.date && doff(m.date)>=0 && doff(m.date)<N_DAYS);
+
+  // ----- HEADER -----
+  // Month row
+  const mrow=document.createElement('div'); mrow.className='head-row';
+  const mlbl=document.createElement('div'); mlbl.className='head-label'; mlbl.textContent='Task';
+  mrow.appendChild(mlbl);
+  const mhs=document.createElement('div'); mhs.className='head-scroll'; mhs.id='hscroll';
+  const mstrip=document.createElement('div'); mstrip.className='month-strip';
+  MONTHS.forEach(m=>{
+    const mc=document.createElement('div'); mc.className='month-cell';
+    mc.style.width=(m.days*DW)+'px'; mc.style.minWidth=(m.days*DW)+'px';
+    mc.textContent=m.n; mstrip.appendChild(mc);
+  });
+  mhs.appendChild(mstrip); mrow.appendChild(mhs); ghead.appendChild(mrow);
+
+  // Day row
+  const drow=document.createElement('div'); drow.className='head-row';
+  const dlbl=document.createElement('div'); dlbl.className='head-label';
+  dlbl.style.height='24px'; dlbl.style.background='#f0f3f8'; drow.appendChild(dlbl);
+  const dhs=document.createElement('div'); dhs.className='head-scroll'; dhs.id='dscroll';
+  const dstrip=document.createElement('div'); dstrip.className='day-strip';
+  for(let d=0;d<N_DAYS;d++){
+    const cur=new Date(GANTT_START); cur.setDate(cur.getDate()+d);
+    const dc=document.createElement('div');
+    let cls='day-cell';
+    if(cur.getDay()===1) cls+=' ws';
+    if(cur.toDateString()===TODAY_DATE.toDateString()) cls+=' td';
+    dc.className=cls; dc.textContent=cur.getDate();
+    dstrip.appendChild(dc);
   }
-  tinner.appendChild(trow);
-});
+  dhs.appendChild(dstrip); drow.appendChild(dhs); ghead.appendChild(drow);
 
-// Milestone row
-const mlrow=document.createElement('div'); mlrow.className='lrow ms'; mlrow.textContent='\u25C6 Milestones';
-lcol.appendChild(mlrow);
-const mtrow=document.createElement('div'); mtrow.className='trow ms'; mtrow.style.width=totalW+'px';
-makeGrid(mtrow,54);
-MS.forEach(m=>{
-  const off=doff(m.date);
-  const d=document.createElement('div'); d.className='diamond';
-  d.style.left=(off*DW+DW/2-8)+'px'; d.style.background=m.color;
-  d.addEventListener('mouseenter',e=>showTip(e,`<b>${m.label}</b><br>${fmt(m.date)}`) );
-  d.addEventListener('mouseleave',hideTip);
-  mtrow.appendChild(d);
-  const ml=document.createElement('div'); ml.className='mlabel';
-  ml.style.left=(off*DW+DW/2-18)+'px'; ml.style.background=m.color; ml.textContent=m.label;
-  mtrow.appendChild(ml);
-});
-tinner.appendChild(mtrow);
+  // ----- BODY ROWS -----
+  function makeGrid(rowEl,rowH){
+    for(let d=0;d<N_DAYS;d++){
+      const cur=new Date(GANTT_START); cur.setDate(cur.getDate()+d);
+      const dc=document.createElement('div');
+      let cls='dcell';
+      if(cur.getDay()===1) cls+=' ws';
+      if(cur.toDateString()===TODAY_DATE.toDateString()) cls+=' td';
+      dc.className=cls; dc.style.height=rowH+'px';
+      rowEl.appendChild(dc);
+    }
+  }
 
-// ── SYNC SCROLL: header follows body horizontal scroll ──
-const hscroll=document.getElementById('hscroll');
-const dscroll=document.getElementById('dscroll');
-scol.addEventListener('scroll',()=>{
-  hscroll.scrollLeft=scol.scrollLeft;
-  dscroll.scrollLeft=scol.scrollLeft;
-});
+  function addMlines(rowEl){
+    activeMilestones.forEach(m=>{
+      const off=doff(m.date);
+      const ml=document.createElement('div'); ml.className='mline';
+      ml.style.left=(off*DW+DW/2-1)+'px';
+      ml.style.background=msColor(m);
+      rowEl.appendChild(ml);
+    });
+  }
 
-// ── DRAG TO SCROLL ──
-let isDragging=false,startX,sl;
-scol.addEventListener('mousedown',e=>{isDragging=true;startX=e.pageX-scol.offsetLeft;sl=scol.scrollLeft;});
-scol.addEventListener('mousemove',e=>{if(!isDragging)return;e.preventDefault();const x=e.pageX-scol.offsetLeft;scol.scrollLeft=sl-(x-startX);});
-scol.addEventListener('mouseup',()=>isDragging=false);
-scol.addEventListener('mouseleave',()=>isDragging=false);
+  TASKS.forEach(task=>{
+    const lrow=document.createElement('div');
+    lrow.className='lrow'+(task.sec?' sec':'');
+    lrow.textContent=task.sec||task.label;
+    lcol.appendChild(lrow);
 
-// Scroll to today on load
+    const trow=document.createElement('div');
+    trow.className='trow'+(task.sec?' sec':'');
+    const rh=task.sec?30:48;
+    trow.style.width=totalW+'px';
+    makeGrid(trow,rh);
+    if(!task.sec) addMlines(trow);
+
+    if(!task.sec){
+      const so=doff(task.s), eo=doff(task.e);
+      const bar=document.createElement('div'); bar.className='bar';
+      bar.style.left=(so*DW)+'px';
+      bar.style.width=((eo-so+1)*DW)+'px';
+      bar.style.background=task.done?'#aab4c0':task.color;
+      if((eo-so+1)*DW>55) bar.textContent=task.label;
+      bar.addEventListener('mouseenter',e=>showTip(e,`<b>${task.label}</b><br>${fmt(task.s)} &rarr; ${fmt(task.e)}<br>${eo-so+1} days${task.done?' &nbsp;&#10003; Done':''}`));
+      bar.addEventListener('mouseleave',hideTip);
+      trow.appendChild(bar);
+    }
+    tinner.appendChild(trow);
+  });
+
+  // Milestone diamond row
+  const mlrow=document.createElement('div'); mlrow.className='lrow ms'; mlrow.textContent='\u25C6 Milestones';
+  lcol.appendChild(mlrow);
+  const mtrow=document.createElement('div'); mtrow.className='trow ms'; mtrow.style.width=totalW+'px';
+  makeGrid(mtrow,60);
+
+  activeMilestones.forEach(m=>{
+    const off=doff(m.date);
+    const d=document.createElement('div'); d.className='diamond';
+    d.style.left=(off*DW+DW/2-8)+'px'; d.style.background=msColor(m);
+    d.addEventListener('mouseenter',e=>showTip(e,`<b>${m.label}</b><br>${fmt(m.date)}${m.notes?'<br>'+m.notes:''}${m.status?'<br><i>'+m.status+'</i>':''}`) );
+    d.addEventListener('mouseleave',hideTip);
+    mtrow.appendChild(d);
+    const ml=document.createElement('div'); ml.className='mlabel';
+    ml.style.left=(off*DW+DW/2-18)+'px'; ml.style.background=msColor(m); ml.textContent=m.label;
+    mtrow.appendChild(ml);
+  });
+  tinner.appendChild(mtrow);
+
+  // ----- SCROLL SYNC -----
+  const scol=document.getElementById('scol');
+  const hscroll=document.getElementById('hscroll');
+  const dscroll=document.getElementById('dscroll');
+  // remove old listeners by cloning
+  const newScol=scol.cloneNode(true);
+  scol.parentNode.replaceChild(newScol,scol);
+  newScol.appendChild(tinner);
+
+  newScol.addEventListener('scroll',()=>{
+    hscroll.scrollLeft=newScol.scrollLeft;
+    dscroll.scrollLeft=newScol.scrollLeft;
+  });
+  let isDragging=false,startX,sl;
+  newScol.addEventListener('mousedown',e=>{isDragging=true;startX=e.pageX-newScol.offsetLeft;sl=newScol.scrollLeft;});
+  newScol.addEventListener('mousemove',e=>{if(!isDragging)return;e.preventDefault();const x=e.pageX-newScol.offsetLeft;newScol.scrollLeft=sl-(x-startX);});
+  newScol.addEventListener('mouseup',()=>isDragging=false);
+  newScol.addEventListener('mouseleave',()=>isDragging=false);
+}
+
+// ============================================================
+// EDITABLE DEADLINES TABLE
+// ============================================================
+const STATUS_OPTIONS = ['TBC','Planned','Deadline','Done'];
+
+function sortMilestones(){
+  milestones.sort((a,b)=>{
+    if(!a.date) return 1;
+    if(!b.date) return -1;
+    return new Date(a.date)-new Date(b.date);
+  });
+}
+
+function renderTable(){
+  sortMilestones();
+  const tbody=document.getElementById('dlBody');
+  tbody.innerHTML='';
+  milestones.forEach((m,i)=>{
+    const tr=document.createElement('tr');
+
+    // Event name
+    const tdN=document.createElement('td');
+    const inN=document.createElement('input');
+    inN.className='editable'; inN.type='text'; inN.value=m.label||'';
+    inN.addEventListener('change',()=>{ milestones[i].label=inN.value; rebuildAll(); });
+    tdN.appendChild(inN); tr.appendChild(tdN);
+
+    // Date
+    const tdD=document.createElement('td');
+    const inD=document.createElement('input');
+    inD.className='editable'; inD.type='date'; inD.value=toInputDate(m.date)||'';
+    inD.addEventListener('change',()=>{ milestones[i].date=inD.value; rebuildAll(); });
+    tdD.appendChild(inD); tr.appendChild(tdD);
+
+    // Notes
+    const tdNo=document.createElement('td');
+    const inNo=document.createElement('input');
+    inNo.className='editable'; inNo.type='text'; inNo.value=m.notes||'';
+    inNo.placeholder='Add a note...';
+    inNo.addEventListener('change',()=>{ milestones[i].notes=inNo.value; });
+    tdNo.appendChild(inNo); tr.appendChild(tdNo);
+
+    // Status
+    const tdS=document.createElement('td');
+    const sel=document.createElement('select'); sel.className='editable';
+    STATUS_OPTIONS.forEach(opt=>{
+      const o=document.createElement('option'); o.value=opt; o.textContent=opt;
+      if(opt===m.status) o.selected=true;
+      sel.appendChild(o);
+    });
+    // wrap in tag span for display — update on change
+    const tagSpan=document.createElement('span');
+    tagSpan.className='tag '+tagClass(m.status);
+    tagSpan.textContent=m.status||'TBC';
+    // use select inside tag
+    sel.style.background='transparent'; sel.style.border='none'; sel.style.font='inherit'; sel.style.fontWeight='700'; sel.style.color='inherit';
+    tagSpan.innerHTML='';
+    tagSpan.appendChild(sel);
+    sel.addEventListener('change',()=>{
+      milestones[i].status=sel.value;
+      milestones[i].color=COLOR_MAP[sel.value]||milestones[i].color;
+      tagSpan.className='tag '+tagClass(sel.value);
+      rebuildAll();
+    });
+    tdS.appendChild(tagSpan); tr.appendChild(tdS);
+
+    // Delete
+    const tdDel=document.createElement('td');
+    const btn=document.createElement('button'); btn.className='btn-del'; btn.title='Remove row';
+    btn.innerHTML='&#10005;';
+    btn.addEventListener('click',()=>{ milestones.splice(i,1); rebuildAll(); });
+    tdDel.appendChild(btn); tr.appendChild(tdDel);
+
+    tbody.appendChild(tr);
+  });
+}
+
+function addRow(){
+  milestones.push({label:'New event',date:'',notes:'',status:'TBC',color:'#7030a0'});
+  renderTable();
+  // focus the new label cell
+  const rows=document.getElementById('dlBody').querySelectorAll('tr');
+  const lastRow=rows[rows.length-1];
+  if(lastRow) lastRow.querySelector('input').focus();
+}
+
+function rebuildAll(){
+  renderTable();
+  buildGantt();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+buildGantt();
+renderTable();
+
+// Scroll to today
 window.addEventListener('load',()=>{
-  const todayOff=doff('2026-06-03');
-  scol.scrollLeft=Math.max(0,todayOff*DW-60);
+  const scol=document.querySelector('.scroll-col');
+  if(scol){
+    const todayOff=Math.round((TODAY_DATE-GANTT_START)/86400000);
+    scol.scrollLeft=Math.max(0,todayOff*DW-80);
+  }
 });
 </script>
 </body>
