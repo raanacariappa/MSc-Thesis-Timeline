@@ -1,4 +1,4 @@
-# 🏎️ MSc Motorsport Engineering — Thesis Timeline
+# MSc Motorsport Engineering — Thesis Timeline
 
 **Cranfield University | Individual Research Project A25**  
 **Topic:** Telemetry-Driven Tyre Thermal & Cold Pressure Recommendation Model for GT3 Motorsport  
@@ -9,34 +9,38 @@
 ## 📅 Gantt Chart
 
 ```mermaid
+%%{init: { 'logLevel': 'debug', 'theme': 'base', 'themeVariables': { 'fontSize': '16px', 'ganttBarHeight': 28, 'gridLineStartPadding': 35, 'sectionFontSize': '16px', 'numberSectionStyles': 5 }, 'gantt': {'barHeight': 28, 'barGap': 6, 'topPadding': 50, 'sidePadding': 75, 'displayMode': 'compact'} }}%%
 gantt
     title MSc Thesis Timeline — June to August 2026
     dateFormat  YYYY-MM-DD
     axisFormat  %d %b
 
-    section 📚 Research & Scope
+    section Research & Scope
     Refine aim & objectives          :done,    obj,   2026-06-01, 2026-06-07
-    Literature review                :active,  lit,   2026-06-01, 2026-06-21
+    Literature review                :active,  lit,   2026-06-01, 2026-06-30
+    Literature review chapter due    :crit,    litdue,2026-06-30, 1d
 
-    section 🔧 Data & Method
+    section Data & Method
     Data audit & preprocessing       :         data,  2026-06-08, 2026-06-28
     Method formulation               :         meth,  2026-06-15, 2026-07-12
 
-    section 💻 Implementation
+    section Implementation
     MATLAB / Simulink build          :         build, 2026-06-22, 2026-07-26
     Validation & sensitivity checks  :         val,   2026-07-13, 2026-08-09
 
-    section 📊 Analysis & Writing
+    section Analysis & Writing
     Results analysis                 :         res,   2026-07-27, 2026-08-16
     Write thesis chapters            :         write, 2026-07-06, 2026-08-23
 
-    section ✅ Final
+    section Final
     Final edits & formatting         :crit,    edit,  2026-08-24, 2026-08-31
 
-    section 🔖 Milestones
-    Mid-project review               :milestone, m1, 2026-07-01, 0d
-    Draft complete                   :milestone, m2, 2026-08-10, 0d
-    Submission deadline              :milestone, m3, 2026-08-31, 0d
+    section Deadlines & Reviews
+    Literature review chapter due    :crit, milestone, litmil, 2026-06-30, 0d
+    Review 1 (TBC)                   :crit, milestone, r1,     2026-06-29, 0d
+    Review 2 (TBC)                   :crit, milestone, r2,     2026-07-27, 0d
+    Draft complete                   :milestone,       m2,     2026-08-10, 0d
+    Submission deadline              :crit, milestone, m3,     2026-08-31, 0d
 ```
 
 ---
@@ -46,7 +50,7 @@ gantt
 | # | Task | Start | End | Duration | Section |
 |---|------|-------|-----|----------|---------|
 | 1 | Refine aim & objectives | 01 Jun | 07 Jun | 7 days | Research & Scope |
-| 2 | Literature review | 01 Jun | 21 Jun | 21 days | Research & Scope |
+| 2 | Literature review | 01 Jun | 30 Jun | 30 days | Research & Scope |
 | 3 | Data audit & preprocessing | 08 Jun | 28 Jun | 21 days | Data & Method |
 | 4 | Method formulation | 15 Jun | 12 Jul | 28 days | Data & Method |
 | 5 | MATLAB / Simulink build | 22 Jun | 26 Jul | 35 days | Implementation |
@@ -57,11 +61,13 @@ gantt
 
 ---
 
-## 🔖 Key Milestones
+## 🔖 Key Deadlines & Reviews
 
-| Milestone | Date | Description |
-|-----------|------|-------------|
-| 🟢 Mid-project review | 01 Jul 2026 | Check progress against objectives |
+| Event | Date | Notes |
+|-------|------|-------|
+| 🔴 Literature review chapter due | 30 Jun 2026 | Chapter submitted before end of June |
+| 🟡 Review 1 | 29 Jun 2026 | TBC — supervisor progress check |
+| 🟡 Review 2 | 27 Jul 2026 | TBC — 4 weeks after Review 1 |
 | 🟠 Draft complete | 10 Aug 2026 | Full draft ready for supervisor review |
 | 🔴 Submission deadline | 31 Aug 2026 | Final thesis submitted |
 
