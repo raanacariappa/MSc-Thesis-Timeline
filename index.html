@@ -7,27 +7,17 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6f9;color:#1a1a2e;}
-
-header{
-  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);
-  color:white;padding:28px 40px 20px;
-  border-bottom:4px solid #e94560;
-}
+header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);color:white;padding:28px 40px 20px;border-bottom:4px solid #e94560;}
 header h1{font-size:24px;font-weight:700;margin-bottom:4px;}
 header p{font-size:13px;color:#a8b8d8;margin-top:3px;}
 .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;}
 .badge{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#c8d8f0;font-size:11.5px;padding:3px 11px;border-radius:20px;}
-
 .container{padding:28px 40px;}
-
 .legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;align-items:center;}
 .legend-title{font-size:12.5px;font-weight:700;color:#555;}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#444;}
 .legend-dot{width:13px;height:13px;border-radius:3px;flex-shrink:0;}
-
 .scroll-hint{text-align:center;font-size:12px;color:#aaa;margin-bottom:10px;}
-
-/* GANTT SHELL */
 .gantt-shell{background:white;border-radius:12px;box-shadow:0 2px 20px rgba(0,0,0,0.08);overflow:hidden;margin-bottom:32px;display:flex;flex-direction:column;}
 :root{--lw:210px;--dw:18px;}
 .gantt-head{display:flex;flex-direction:column;position:sticky;top:0;z-index:30;background:white;border-bottom:2px solid #dce3ef;}
@@ -61,40 +51,33 @@ header p{font-size:13px;color:#a8b8d8;margin-top:3px;}
 .diamond{position:absolute;width:16px;height:16px;border-radius:2px;transform:translateY(-50%) rotate(45deg);top:50%;z-index:15;box-shadow:0 2px 6px rgba(0,0,0,0.25);cursor:pointer;transition:transform .15s;}
 .diamond:hover{transform:translateY(-50%) rotate(45deg) scale(1.35);}
 .mlabel{position:absolute;top:5px;font-size:9.5px;font-weight:800;white-space:nowrap;z-index:20;padding:2px 5px;border-radius:3px;color:white;pointer-events:none;}
-
-/* Tooltip */
 .tip{display:none;position:fixed;background:#1a1a2e;color:white;font-size:12px;padding:8px 13px;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,0.28);z-index:9999;pointer-events:none;max-width:260px;line-height:1.6;}
-
-/* EDITABLE DEADLINES */
 .dl-section{background:white;border-radius:12px;box-shadow:0 2px 20px rgba(0,0,0,0.07);padding:24px 28px;margin-bottom:32px;}
-.dl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.dl-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap;}
 .dl-header h2{font-size:15px;font-weight:700;color:#1a1a2e;border-bottom:2px solid #e94560;padding-bottom:7px;display:inline-block;}
-.dl-note{font-size:12px;color:#888;font-style:italic;margin-top:4px;}
-
+.dl-note{font-size:12px;color:#888;font-style:italic;margin-top:5px;}
 .dl-table-wrap{overflow-x:auto;}
 table.dl-tbl{width:100%;border-collapse:collapse;font-size:13px;}
 table.dl-tbl th{background:#1a1a2e;color:white;padding:9px 14px;text-align:left;font-size:12px;white-space:nowrap;}
 table.dl-tbl td{padding:7px 10px;border-bottom:1px solid #edf0f5;vertical-align:middle;}
 table.dl-tbl tr:hover td{background:#f7f9fc;}
-
-/* editable cells */
 .editable{border:none;background:transparent;font-size:13px;font-family:inherit;color:#1a1a2e;width:100%;min-width:80px;outline:none;cursor:pointer;}
 .editable:focus{background:#f0f6ff;border-radius:4px;cursor:text;padding:2px 4px;}
 input[type=date].editable{min-width:120px;}
 select.editable{cursor:pointer;}
-
 .tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
 .tag.tbc{background:#fff3cd;color:#856404;}
 .tag.plan{background:#d1e7dd;color:#0a5c36;}
 .tag.dl{background:#f8d7da;color:#842029;}
 .tag.done{background:#e2e3e5;color:#383d41;}
-
 .btn-del{background:none;border:none;color:#dc3545;font-size:15px;cursor:pointer;padding:2px 6px;border-radius:4px;transition:background .15s;line-height:1;}
 .btn-del:hover{background:#fde8ea;}
-
-.add-row-btn{margin-top:12px;background:#1a1a2e;color:white;border:none;padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;}
+.btn-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center;}
+.add-row-btn{background:#1a1a2e;color:white;border:none;padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;}
 .add-row-btn:hover{background:#0f3460;}
-
+.reset-btn{background:none;border:1px solid #ccc;color:#888;padding:7px 14px;border-radius:7px;font-size:12px;cursor:pointer;transition:all .15s;}
+.reset-btn:hover{border-color:#dc3545;color:#dc3545;background:#fde8ea;}
+.saved-badge{font-size:11.5px;color:#0a5c36;background:#d1e7dd;padding:4px 10px;border-radius:20px;font-weight:600;opacity:0;transition:opacity .4s;}
 footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
 </style>
 </head>
@@ -110,9 +93,7 @@ footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
     <span class="badge">Porsche 992.1 GT3 Cup</span>
   </div>
 </header>
-
 <div class="container">
-
 <div class="legend">
   <span class="legend-title">Legend &nbsp;</span>
   <span class="legend-item"><span class="legend-dot" style="background:#4472c4"></span>Research &amp; Scope</span>
@@ -123,9 +104,7 @@ footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
   <span class="legend-item"><span class="legend-dot" style="background:#7030a0;border-radius:50%"></span>Milestone</span>
   <span class="legend-item"><span class="legend-dot" style="background:#ffc107;border-radius:50%"></span>Today</span>
 </div>
-
 <p class="scroll-hint">&larr; Scroll the timeline horizontally to see all months &rarr; &nbsp;|&nbsp; Hover bars &amp; diamonds for details</p>
-
 <div class="gantt-shell">
   <div id="ghead" class="gantt-head"></div>
   <div class="gantt-body">
@@ -135,14 +114,13 @@ footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
     </div>
   </div>
 </div>
-
-<!-- EDITABLE DEADLINES -->
 <div class="dl-section">
   <div class="dl-header">
     <div>
       <h2>Key Deadlines &amp; Reviews</h2>
-      <p class="dl-note">&#9998; Click any cell to edit &nbsp;|&nbsp; Changes instantly update the Gantt chart &nbsp;|&nbsp; Table auto-sorts by date</p>
+      <p class="dl-note">&#9998; Click any cell to edit &nbsp;&bull;&nbsp; Changes auto-save in your browser &nbsp;&bull;&nbsp; Table sorts by date &nbsp;&bull;&nbsp; Gantt updates instantly</p>
     </div>
+    <span class="saved-badge" id="savedBadge">&#10003; Saved</span>
   </div>
   <div class="dl-table-wrap">
     <table class="dl-tbl" id="dlTable">
@@ -150,26 +128,26 @@ footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
       <tbody id="dlBody"></tbody>
     </table>
   </div>
-  <button class="add-row-btn" onclick="addRow()">&#43; Add deadline / event</button>
+  <div class="btn-row">
+    <button class="add-row-btn" onclick="addRow()">&#43; Add deadline / event</button>
+    <button class="reset-btn" onclick="resetDefaults()">&#8635; Reset to defaults</button>
+  </div>
 </div>
-
 </div>
 <footer>Cranfield University &mdash; MSc Motorsport Engineering &mdash; June 2026</footer>
 
 <script>
-// ============================================================
-// DATA
-// ============================================================
+const STORAGE_KEY = 'thesis_milestones_v1';
 const GANTT_START = new Date('2026-06-01');
 const GANTT_END   = new Date('2026-08-31');
 const TODAY_DATE  = new Date('2026-06-03');
-const N_DAYS = Math.round((GANTT_END - GANTT_START)/86400000)+1;
-const DW = 18; // px per day
+const N_DAYS = Math.round((GANTT_END-GANTT_START)/86400000)+1;
+const DW = 18;
 
 const TASKS = [
   {sec:'Research & Scope'},
-  {label:'Refine aim & objectives', s:'2026-06-01',e:'2026-06-07',color:'#4472c4',done:true},
-  {label:'Literature review',       s:'2026-06-01',e:'2026-06-30',color:'#4472c4'},
+  {label:'Refine aim & objectives',s:'2026-06-01',e:'2026-06-07',color:'#4472c4',done:true},
+  {label:'Literature review',      s:'2026-06-01',e:'2026-06-30',color:'#4472c4'},
   {sec:'Data & Method'},
   {label:'Data audit & preprocessing',s:'2026-06-08',e:'2026-06-28',color:'#70ad47'},
   {label:'Method formulation',        s:'2026-06-15',e:'2026-07-12',color:'#70ad47'},
@@ -182,299 +160,214 @@ const TASKS = [
   {sec:'Final'},
   {label:'Final edits & formatting',  s:'2026-08-24',e:'2026-08-31',color:'#e94560'},
 ];
+const MONTHS=[{n:'June 2026',days:30},{n:'July 2026',days:31},{n:'August 2026',days:31}];
+const COLOR_MAP={'Deadline':'#e94560','TBC':'#7030a0','Planned':'#ed7d31','Done':'#6c757d'};
 
-const MONTHS = [{n:'June 2026',days:30},{n:'July 2026',days:31},{n:'August 2026',days:31}];
-
-// Milestone data — driven by the editable table
-let milestones = [
-  {label:'Lit Review Due', date:'2026-06-30', color:'#e94560',  status:'Deadline'},
-  {label:'Review 1',       date:'2026-06-29', color:'#7030a0',  status:'TBC',   notes:'Supervisor progress check'},
-  {label:'Review 2',       date:'2026-07-27', color:'#7030a0',  status:'TBC',   notes:'4 weeks after Review 1'},
-  {label:'Poster Submission', date:'2026-08-20', color:'#0097a7', status:'TBC',  notes:'Submit poster to Canvas as PDF'},
-  {label:'Oral Viva',      date:'2026-08-28', color:'#c0392b',  status:'TBC',   notes:'10-min presentation + Q&A, two academic staff'},
-  {label:'Draft Complete', date:'2026-08-10', color:'#ed7d31',  status:'Planned',notes:'Full draft ready for supervisor'},
-  {label:'Submit Thesis',  date:'2026-08-31', color:'#e94560',  status:'Deadline',notes:'Final thesis submitted'},
+const DEFAULT_MILESTONES = [
+  {label:'Lit Review Due',   date:'2026-06-30',color:'#e94560',status:'Deadline',notes:'Chapter submitted before end of June'},
+  {label:'Review 1',         date:'2026-06-29',color:'#7030a0',status:'TBC',     notes:'Supervisor progress check'},
+  {label:'Review 2',         date:'2026-07-27',color:'#7030a0',status:'TBC',     notes:'4 weeks after Review 1'},
+  {label:'Draft Complete',   date:'2026-08-10',color:'#ed7d31',status:'Planned', notes:'Full draft ready for supervisor'},
+  {label:'Poster Submission',date:'2026-08-20',color:'#0097a7',status:'TBC',     notes:'Submit poster to Canvas as PDF'},
+  {label:'Oral Viva',        date:'2026-08-28',color:'#c0392b',status:'TBC',     notes:'10-min presentation + Q&A, two academic staff'},
+  {label:'Submit Thesis',    date:'2026-08-31',color:'#e94560',status:'Deadline',notes:'Final thesis submitted'},
 ];
 
-// ============================================================
-// HELPERS
-// ============================================================
-function doff(str){
-  if(!str) return -1;
-  return Math.round((new Date(str)-GANTT_START)/86400000);
+// ---- PERSISTENCE ----
+function saveMilestones(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(milestones));
+    const badge=document.getElementById('savedBadge');
+    badge.style.opacity='1';
+    setTimeout(()=>badge.style.opacity='0',2000);
+  }catch(e){console.warn('localStorage unavailable',e);}
 }
-function fmt(str){
-  if(!str) return '—';
-  const d=new Date(str);
-  return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+function loadMilestones(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed=JSON.parse(raw);
+      if(Array.isArray(parsed)&&parsed.length>0) return parsed;
+    }
+  }catch(e){console.warn('Could not load saved data',e);}
+  return JSON.parse(JSON.stringify(DEFAULT_MILESTONES));
 }
-function toInputDate(str){
-  if(!str) return '';
-  const d=new Date(str);
-  return d.toISOString().slice(0,10);
-}
-function tagClass(s){
-  const m={'TBC':'tbc','Planned':'plan','Deadline':'dl','Done':'done'};
-  return m[s]||'plan';
-}
-
-// Milestone colors by status/type — deterministic
-const COLOR_MAP = {
-  'Deadline':'#e94560','TBC':'#7030a0','Planned':'#ed7d31','Done':'#6c757d'
-};
-function msColor(m){
-  // keep explicit color if set, else map from status
-  return m.color || COLOR_MAP[m.status] || '#7030a0';
+function resetDefaults(){
+  if(confirm('Reset all deadlines to the original defaults? Your changes will be lost.')){
+    milestones=JSON.parse(JSON.stringify(DEFAULT_MILESTONES));
+    saveMilestones();
+    rebuildAll();
+  }
 }
 
-// ============================================================
-// GANTT BUILDER
-// ============================================================
-const tip = document.getElementById('tip');
+let milestones = loadMilestones();
+
+// ---- HELPERS ----
+function doff(str){if(!str)return -1;return Math.round((new Date(str)-GANTT_START)/86400000);}
+function fmt(str){if(!str)return '\u2014';return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function toInputDate(str){if(!str)return '';return new Date(str).toISOString().slice(0,10);}
+function tagClass(s){return({'TBC':'tbc','Planned':'plan','Deadline':'dl','Done':'done'}[s]||'plan');}
+function msColor(m){return m.color||COLOR_MAP[m.status]||'#7030a0';}
+
+// ---- TOOLTIP ----
+const tip=document.getElementById('tip');
 function showTip(e,html){tip.innerHTML=html;tip.style.display='block';}
 function moveTip(e){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+14)+'px';}
 function hideTip(){tip.style.display='none';}
 document.addEventListener('mousemove',moveTip);
 
+// ---- GANTT ----
 function buildGantt(){
-  const ghead  = document.getElementById('ghead');
-  const lcol   = document.getElementById('lcol');
-  const tinner = document.getElementById('tinner');
-  ghead.innerHTML='';
-  lcol.innerHTML='';
-  tinner.innerHTML='';
-
-  const totalW = N_DAYS*DW;
+  const ghead=document.getElementById('ghead'),lcol=document.getElementById('lcol'),tinner=document.getElementById('tinner');
+  ghead.innerHTML='';lcol.innerHTML='';tinner.innerHTML='';
+  const totalW=N_DAYS*DW;
   tinner.style.width=totalW+'px';
+  const active=milestones.filter(m=>m.date&&doff(m.date)>=0&&doff(m.date)<N_DAYS);
 
-  // Get milestones that have valid dates within range
-  const activeMilestones = milestones
-    .filter(m=>m.date && doff(m.date)>=0 && doff(m.date)<N_DAYS);
+  // Month header
+  const mrow=document.createElement('div');mrow.className='head-row';
+  const mlbl=document.createElement('div');mlbl.className='head-label';mlbl.textContent='Task';mrow.appendChild(mlbl);
+  const mhs=document.createElement('div');mhs.className='head-scroll';mhs.id='hscroll';
+  const mstrip=document.createElement('div');mstrip.className='month-strip';
+  MONTHS.forEach(m=>{const mc=document.createElement('div');mc.className='month-cell';mc.style.width=(m.days*DW)+'px';mc.style.minWidth=(m.days*DW)+'px';mc.textContent=m.n;mstrip.appendChild(mc);});
+  mhs.appendChild(mstrip);mrow.appendChild(mhs);ghead.appendChild(mrow);
 
-  // ----- HEADER -----
-  // Month row
-  const mrow=document.createElement('div'); mrow.className='head-row';
-  const mlbl=document.createElement('div'); mlbl.className='head-label'; mlbl.textContent='Task';
-  mrow.appendChild(mlbl);
-  const mhs=document.createElement('div'); mhs.className='head-scroll'; mhs.id='hscroll';
-  const mstrip=document.createElement('div'); mstrip.className='month-strip';
-  MONTHS.forEach(m=>{
-    const mc=document.createElement('div'); mc.className='month-cell';
-    mc.style.width=(m.days*DW)+'px'; mc.style.minWidth=(m.days*DW)+'px';
-    mc.textContent=m.n; mstrip.appendChild(mc);
-  });
-  mhs.appendChild(mstrip); mrow.appendChild(mhs); ghead.appendChild(mrow);
-
-  // Day row
-  const drow=document.createElement('div'); drow.className='head-row';
-  const dlbl=document.createElement('div'); dlbl.className='head-label';
-  dlbl.style.height='24px'; dlbl.style.background='#f0f3f8'; drow.appendChild(dlbl);
-  const dhs=document.createElement('div'); dhs.className='head-scroll'; dhs.id='dscroll';
-  const dstrip=document.createElement('div'); dstrip.className='day-strip';
+  // Day header
+  const drow=document.createElement('div');drow.className='head-row';
+  const dlbl=document.createElement('div');dlbl.className='head-label';dlbl.style.height='24px';dlbl.style.background='#f0f3f8';drow.appendChild(dlbl);
+  const dhs=document.createElement('div');dhs.className='head-scroll';dhs.id='dscroll';
+  const dstrip=document.createElement('div');dstrip.className='day-strip';
   for(let d=0;d<N_DAYS;d++){
-    const cur=new Date(GANTT_START); cur.setDate(cur.getDate()+d);
-    const dc=document.createElement('div');
-    let cls='day-cell';
-    if(cur.getDay()===1) cls+=' ws';
-    if(cur.toDateString()===TODAY_DATE.toDateString()) cls+=' td';
-    dc.className=cls; dc.textContent=cur.getDate();
-    dstrip.appendChild(dc);
+    const cur=new Date(GANTT_START);cur.setDate(cur.getDate()+d);
+    const dc=document.createElement('div');let cls='day-cell';
+    if(cur.getDay()===1)cls+=' ws';
+    if(cur.toDateString()===TODAY_DATE.toDateString())cls+=' td';
+    dc.className=cls;dc.textContent=cur.getDate();dstrip.appendChild(dc);
   }
-  dhs.appendChild(dstrip); drow.appendChild(dhs); ghead.appendChild(drow);
+  dhs.appendChild(dstrip);drow.appendChild(dhs);ghead.appendChild(drow);
 
-  // ----- BODY ROWS -----
   function makeGrid(rowEl,rowH){
     for(let d=0;d<N_DAYS;d++){
-      const cur=new Date(GANTT_START); cur.setDate(cur.getDate()+d);
-      const dc=document.createElement('div');
-      let cls='dcell';
-      if(cur.getDay()===1) cls+=' ws';
-      if(cur.toDateString()===TODAY_DATE.toDateString()) cls+=' td';
-      dc.className=cls; dc.style.height=rowH+'px';
-      rowEl.appendChild(dc);
+      const cur=new Date(GANTT_START);cur.setDate(cur.getDate()+d);
+      const dc=document.createElement('div');let cls='dcell';
+      if(cur.getDay()===1)cls+=' ws';
+      if(cur.toDateString()===TODAY_DATE.toDateString())cls+=' td';
+      dc.className=cls;dc.style.height=rowH+'px';rowEl.appendChild(dc);
     }
   }
-
   function addMlines(rowEl){
-    activeMilestones.forEach(m=>{
-      const off=doff(m.date);
-      const ml=document.createElement('div'); ml.className='mline';
-      ml.style.left=(off*DW+DW/2-1)+'px';
-      ml.style.background=msColor(m);
+    active.forEach(m=>{
+      const ml=document.createElement('div');ml.className='mline';
+      ml.style.left=(doff(m.date)*DW+DW/2-1)+'px';ml.style.background=msColor(m);
       rowEl.appendChild(ml);
     });
   }
 
   TASKS.forEach(task=>{
-    const lrow=document.createElement('div');
-    lrow.className='lrow'+(task.sec?' sec':'');
-    lrow.textContent=task.sec||task.label;
-    lcol.appendChild(lrow);
-
-    const trow=document.createElement('div');
-    trow.className='trow'+(task.sec?' sec':'');
-    const rh=task.sec?30:48;
-    trow.style.width=totalW+'px';
-    makeGrid(trow,rh);
-    if(!task.sec) addMlines(trow);
-
+    const lrow=document.createElement('div');lrow.className='lrow'+(task.sec?' sec':'');lrow.textContent=task.sec||task.label;lcol.appendChild(lrow);
+    const trow=document.createElement('div');trow.className='trow'+(task.sec?' sec':'');
+    const rh=task.sec?30:48;trow.style.width=totalW+'px';
+    makeGrid(trow,rh);if(!task.sec)addMlines(trow);
     if(!task.sec){
-      const so=doff(task.s), eo=doff(task.e);
-      const bar=document.createElement('div'); bar.className='bar';
-      bar.style.left=(so*DW)+'px';
-      bar.style.width=((eo-so+1)*DW)+'px';
+      const so=doff(task.s),eo=doff(task.e);
+      const bar=document.createElement('div');bar.className='bar';
+      bar.style.left=(so*DW)+'px';bar.style.width=((eo-so+1)*DW)+'px';
       bar.style.background=task.done?'#aab4c0':task.color;
-      if((eo-so+1)*DW>55) bar.textContent=task.label;
-      bar.addEventListener('mouseenter',e=>showTip(e,`<b>${task.label}</b><br>${fmt(task.s)} &rarr; ${fmt(task.e)}<br>${eo-so+1} days${task.done?' &nbsp;&#10003; Done':''}`));
+      if((eo-so+1)*DW>55)bar.textContent=task.label;
+      bar.addEventListener('mouseenter',e=>showTip(e,`<b>${task.label}</b><br>${fmt(task.s)} &rarr; ${fmt(task.e)}<br>${eo-so+1} days${task.done?' &#10003; Done':''}`));
       bar.addEventListener('mouseleave',hideTip);
       trow.appendChild(bar);
     }
     tinner.appendChild(trow);
   });
 
-  // Milestone diamond row
-  const mlrow=document.createElement('div'); mlrow.className='lrow ms'; mlrow.textContent='\u25C6 Milestones';
-  lcol.appendChild(mlrow);
-  const mtrow=document.createElement('div'); mtrow.className='trow ms'; mtrow.style.width=totalW+'px';
+  // Milestone row
+  const mlrow=document.createElement('div');mlrow.className='lrow ms';mlrow.textContent='\u25C6 Milestones';lcol.appendChild(mlrow);
+  const mtrow=document.createElement('div');mtrow.className='trow ms';mtrow.style.width=totalW+'px';
   makeGrid(mtrow,60);
-
-  activeMilestones.forEach(m=>{
+  active.forEach(m=>{
     const off=doff(m.date);
-    const d=document.createElement('div'); d.className='diamond';
-    d.style.left=(off*DW+DW/2-8)+'px'; d.style.background=msColor(m);
-    d.addEventListener('mouseenter',e=>showTip(e,`<b>${m.label}</b><br>${fmt(m.date)}${m.notes?'<br>'+m.notes:''}${m.status?'<br><i>'+m.status+'</i>':''}`) );
+    const d=document.createElement('div');d.className='diamond';
+    d.style.left=(off*DW+DW/2-8)+'px';d.style.background=msColor(m);
+    d.addEventListener('mouseenter',e=>showTip(e,`<b>${m.label}</b><br>${fmt(m.date)}${m.notes?'<br>'+m.notes:''}${m.status?'<br><i>'+m.status+'</i>':''}`));
     d.addEventListener('mouseleave',hideTip);
     mtrow.appendChild(d);
-    const ml=document.createElement('div'); ml.className='mlabel';
-    ml.style.left=(off*DW+DW/2-18)+'px'; ml.style.background=msColor(m); ml.textContent=m.label;
+    const ml=document.createElement('div');ml.className='mlabel';
+    ml.style.left=(off*DW+DW/2-18)+'px';ml.style.background=msColor(m);ml.textContent=m.label;
     mtrow.appendChild(ml);
   });
   tinner.appendChild(mtrow);
 
-  // ----- SCROLL SYNC -----
+  // Scroll sync
   const scol=document.getElementById('scol');
   const hscroll=document.getElementById('hscroll');
   const dscroll=document.getElementById('dscroll');
-  // remove old listeners by cloning
-  const newScol=scol.cloneNode(true);
-  scol.parentNode.replaceChild(newScol,scol);
-  newScol.appendChild(tinner);
-
-  newScol.addEventListener('scroll',()=>{
-    hscroll.scrollLeft=newScol.scrollLeft;
-    dscroll.scrollLeft=newScol.scrollLeft;
-  });
-  let isDragging=false,startX,sl;
-  newScol.addEventListener('mousedown',e=>{isDragging=true;startX=e.pageX-newScol.offsetLeft;sl=newScol.scrollLeft;});
-  newScol.addEventListener('mousemove',e=>{if(!isDragging)return;e.preventDefault();const x=e.pageX-newScol.offsetLeft;newScol.scrollLeft=sl-(x-startX);});
-  newScol.addEventListener('mouseup',()=>isDragging=false);
-  newScol.addEventListener('mouseleave',()=>isDragging=false);
+  const newScol=scol.cloneNode(true);scol.parentNode.replaceChild(newScol,scol);newScol.appendChild(tinner);
+  newScol.addEventListener('scroll',()=>{hscroll.scrollLeft=newScol.scrollLeft;dscroll.scrollLeft=newScol.scrollLeft;});
+  let isDrag=false,sx,sl;
+  newScol.addEventListener('mousedown',e=>{isDrag=true;sx=e.pageX-newScol.offsetLeft;sl=newScol.scrollLeft;});
+  newScol.addEventListener('mousemove',e=>{if(!isDrag)return;e.preventDefault();newScol.scrollLeft=sl-(e.pageX-newScol.offsetLeft-sx);});
+  newScol.addEventListener('mouseup',()=>isDrag=false);
+  newScol.addEventListener('mouseleave',()=>isDrag=false);
 }
 
-// ============================================================
-// EDITABLE DEADLINES TABLE
-// ============================================================
-const STATUS_OPTIONS = ['TBC','Planned','Deadline','Done'];
-
-function sortMilestones(){
-  milestones.sort((a,b)=>{
-    if(!a.date) return 1;
-    if(!b.date) return -1;
-    return new Date(a.date)-new Date(b.date);
-  });
-}
+// ---- DEADLINES TABLE ----
+const STATUS_OPTIONS=['TBC','Planned','Deadline','Done'];
+function sortMilestones(){milestones.sort((a,b)=>{if(!a.date)return 1;if(!b.date)return -1;return new Date(a.date)-new Date(b.date);});}
 
 function renderTable(){
   sortMilestones();
-  const tbody=document.getElementById('dlBody');
-  tbody.innerHTML='';
+  const tbody=document.getElementById('dlBody');tbody.innerHTML='';
   milestones.forEach((m,i)=>{
     const tr=document.createElement('tr');
-
-    // Event name
-    const tdN=document.createElement('td');
-    const inN=document.createElement('input');
-    inN.className='editable'; inN.type='text'; inN.value=m.label||'';
-    inN.addEventListener('change',()=>{ milestones[i].label=inN.value; rebuildAll(); });
-    tdN.appendChild(inN); tr.appendChild(tdN);
-
+    // Name
+    const tdN=document.createElement('td');const inN=document.createElement('input');
+    inN.className='editable';inN.type='text';inN.value=m.label||'';
+    inN.addEventListener('change',()=>{milestones[i].label=inN.value;saveMilestones();rebuildAll();});
+    tdN.appendChild(inN);tr.appendChild(tdN);
     // Date
-    const tdD=document.createElement('td');
-    const inD=document.createElement('input');
-    inD.className='editable'; inD.type='date'; inD.value=toInputDate(m.date)||'';
-    inD.addEventListener('change',()=>{ milestones[i].date=inD.value; rebuildAll(); });
-    tdD.appendChild(inD); tr.appendChild(tdD);
-
+    const tdD=document.createElement('td');const inD=document.createElement('input');
+    inD.className='editable';inD.type='date';inD.value=toInputDate(m.date)||'';
+    inD.addEventListener('change',()=>{milestones[i].date=inD.value;saveMilestones();rebuildAll();});
+    tdD.appendChild(inD);tr.appendChild(tdD);
     // Notes
-    const tdNo=document.createElement('td');
-    const inNo=document.createElement('input');
-    inNo.className='editable'; inNo.type='text'; inNo.value=m.notes||'';
-    inNo.placeholder='Add a note...';
-    inNo.addEventListener('change',()=>{ milestones[i].notes=inNo.value; });
-    tdNo.appendChild(inNo); tr.appendChild(tdNo);
-
+    const tdNo=document.createElement('td');const inNo=document.createElement('input');
+    inNo.className='editable';inNo.type='text';inNo.value=m.notes||'';inNo.placeholder='Add a note...';
+    inNo.addEventListener('change',()=>{milestones[i].notes=inNo.value;saveMilestones();});
+    tdNo.appendChild(inNo);tr.appendChild(tdNo);
     // Status
     const tdS=document.createElement('td');
-    const sel=document.createElement('select'); sel.className='editable';
-    STATUS_OPTIONS.forEach(opt=>{
-      const o=document.createElement('option'); o.value=opt; o.textContent=opt;
-      if(opt===m.status) o.selected=true;
-      sel.appendChild(o);
-    });
-    // wrap in tag span for display — update on change
-    const tagSpan=document.createElement('span');
-    tagSpan.className='tag '+tagClass(m.status);
-    tagSpan.textContent=m.status||'TBC';
-    // use select inside tag
-    sel.style.background='transparent'; sel.style.border='none'; sel.style.font='inherit'; sel.style.fontWeight='700'; sel.style.color='inherit';
-    tagSpan.innerHTML='';
-    tagSpan.appendChild(sel);
-    sel.addEventListener('change',()=>{
-      milestones[i].status=sel.value;
-      milestones[i].color=COLOR_MAP[sel.value]||milestones[i].color;
-      tagSpan.className='tag '+tagClass(sel.value);
-      rebuildAll();
-    });
-    tdS.appendChild(tagSpan); tr.appendChild(tdS);
-
+    const tagSpan=document.createElement('span');tagSpan.className='tag '+tagClass(m.status);
+    const sel=document.createElement('select');sel.className='editable';
+    sel.style.cssText='background:transparent;border:none;font:inherit;font-weight:700;color:inherit;';
+    STATUS_OPTIONS.forEach(opt=>{const o=document.createElement('option');o.value=opt;o.textContent=opt;if(opt===m.status)o.selected=true;sel.appendChild(o);});
+    sel.addEventListener('change',()=>{milestones[i].status=sel.value;milestones[i].color=COLOR_MAP[sel.value];tagSpan.className='tag '+tagClass(sel.value);saveMilestones();rebuildAll();});
+    tagSpan.appendChild(sel);tdS.appendChild(tagSpan);tr.appendChild(tdS);
     // Delete
-    const tdDel=document.createElement('td');
-    const btn=document.createElement('button'); btn.className='btn-del'; btn.title='Remove row';
-    btn.innerHTML='&#10005;';
-    btn.addEventListener('click',()=>{ milestones.splice(i,1); rebuildAll(); });
-    tdDel.appendChild(btn); tr.appendChild(tdDel);
-
+    const tdDel=document.createElement('td');const btn=document.createElement('button');
+    btn.className='btn-del';btn.title='Remove';btn.innerHTML='&#10005;';
+    btn.addEventListener('click',()=>{milestones.splice(i,1);saveMilestones();rebuildAll();});
+    tdDel.appendChild(btn);tr.appendChild(tdDel);
     tbody.appendChild(tr);
   });
 }
 
 function addRow(){
   milestones.push({label:'New event',date:'',notes:'',status:'TBC',color:'#7030a0'});
+  saveMilestones();
   renderTable();
-  // focus the new label cell
   const rows=document.getElementById('dlBody').querySelectorAll('tr');
-  const lastRow=rows[rows.length-1];
-  if(lastRow) lastRow.querySelector('input').focus();
+  const last=rows[rows.length-1];if(last)last.querySelector('input').focus();
 }
 
-function rebuildAll(){
-  renderTable();
-  buildGantt();
-}
+function rebuildAll(){renderTable();buildGantt();}
 
-// ============================================================
-// INIT
-// ============================================================
+// ---- INIT ----
 buildGantt();
 renderTable();
-
-// Scroll to today
 window.addEventListener('load',()=>{
-  const scol=document.querySelector('.scroll-col');
-  if(scol){
-    const todayOff=Math.round((TODAY_DATE-GANTT_START)/86400000);
-    scol.scrollLeft=Math.max(0,todayOff*DW-80);
-  }
+  const sc=document.querySelector('.scroll-col');
+  if(sc) sc.scrollLeft=Math.max(0,Math.round((TODAY_DATE-GANTT_START)/86400000)*DW-80);
 });
 </script>
 </body>
