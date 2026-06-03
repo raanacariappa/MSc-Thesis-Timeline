@@ -1,93 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MSc Thesis Timeline | Cranfield University</title>
 <style>
+/* ===== THEME VARIABLES ===== */
+:root[data-theme="dark"]{
+  --bg:#0d1117;
+  --bg2:#161b22;
+  --bg3:#1c2333;
+  --bg4:#21262d;
+  --border:#30363d;
+  --border2:#444c56;
+  --text:#e6edf3;
+  --text2:#8b949e;
+  --text3:#c9d1d9;
+  --text-inv:#0d1117;
+  --card-shadow:0 2px 20px rgba(0,0,0,0.4);
+  --row-hover:#1c2333;
+  --day-bg:#161b22;
+  --day-border:#30363d;
+  --ws-bg:rgba(48,54,61,0.5);
+  --ws-border:#444c56;
+  --today-bg:rgba(255,193,7,0.12);
+  --today-border:#ffc107;
+  --sec-bg:#1c2333;
+  --sec-color:#79c0ff;
+  --sec-border:#30363d;
+  --lbl-bg:#161b22;
+  --lbl-border:#30363d;
+  --input-focus:#1f3a5f;
+  --tip-bg:#e6edf3;
+  --tip-color:#0d1117;
+}
+:root[data-theme="light"]{
+  --bg:#f4f6f9;
+  --bg2:#ffffff;
+  --bg3:#eef2fa;
+  --bg4:#f0f3f8;
+  --border:#dce3ef;
+  --border2:#c8d0de;
+  --text:#1a1a2e;
+  --text2:#666;
+  --text3:#444;
+  --text-inv:#ffffff;
+  --card-shadow:0 2px 20px rgba(0,0,0,0.08);
+  --row-hover:#f7f9fc;
+  --day-bg:#f0f3f8;
+  --day-border:#e4e9f2;
+  --ws-bg:rgba(230,236,247,0.3);
+  --ws-border:#dce3ef;
+  --today-bg:rgba(255,220,50,0.12);
+  --today-border:#ffc107;
+  --sec-bg:#eef2fa;
+  --sec-color:#3a5080;
+  --sec-border:#d0d9ec;
+  --lbl-bg:#ffffff;
+  --lbl-border:#dce3ef;
+  --input-focus:#f0f6ff;
+  --tip-bg:#1a1a2e;
+  --tip-color:#ffffff;
+}
+
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6f9;color:#1a1a2e;}
-header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);color:white;padding:28px 40px 20px;border-bottom:4px solid #e94560;}
-header h1{font-size:24px;font-weight:700;margin-bottom:4px;}
-header p{font-size:13px;color:#a8b8d8;margin-top:3px;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px;transition:background .2s,color .2s;}
+
+header{background:linear-gradient(135deg,#0d1117 0%,#161b22 60%,#0f3460 100%);color:white;padding:28px 40px 20px;border-bottom:4px solid #e94560;position:relative;}
+[data-theme="light"] header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);}
+header h1{font-size:26px;font-weight:700;margin-bottom:4px;}
+header p{font-size:14px;color:#a8b8d8;margin-top:3px;}
 .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;}
-.badge{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#c8d8f0;font-size:11.5px;padding:3px 11px;border-radius:20px;}
-.sync-bar{background:#0f3460;color:#a8d8ea;font-size:12px;text-align:center;padding:6px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.badge{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#c8d8f0;font-size:12px;padding:3px 11px;border-radius:20px;}
+
+/* Theme toggle */
+.theme-toggle{position:absolute;top:20px;right:40px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;transition:background .2s;display:flex;align-items:center;gap:6px;}
+.theme-toggle:hover{background:rgba(255,255,255,0.2);}
+
+.sync-bar{background:#0f3460;color:#a8d8ea;font-size:13px;text-align:center;padding:6px;display:flex;align-items:center;justify-content:center;gap:8px;}
 .sync-dot{width:8px;height:8px;border-radius:50%;background:#70ad47;display:inline-block;flex-shrink:0;}
 .sync-dot.saving{background:#ffc000;animation:pulse .7s infinite alternate;}
 .sync-dot.error{background:#e94560;}
 @keyframes pulse{from{opacity:1;}to{opacity:0.3;}}
+
 .container{padding:28px 40px;}
+
 .legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;align-items:center;}
-.legend-title{font-size:12.5px;font-weight:700;color:#555;}
-.legend-item{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#444;}
+.legend-title{font-size:13px;font-weight:700;color:var(--text2);}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text3);}
 .legend-dot{width:13px;height:13px;border-radius:3px;flex-shrink:0;}
-.scroll-hint{text-align:center;font-size:12px;color:#aaa;margin-bottom:10px;}
-.gantt-shell{background:white;border-radius:12px;box-shadow:0 2px 20px rgba(0,0,0,0.08);overflow:hidden;margin-bottom:32px;display:flex;flex-direction:column;}
-:root{--lw:210px;--dw:18px;}
-.gantt-head{display:flex;flex-direction:column;position:sticky;top:0;z-index:30;background:white;border-bottom:2px solid #dce3ef;}
+.scroll-hint{text-align:center;font-size:13px;color:var(--text2);margin-bottom:10px;}
+
+/* GANTT */
+.gantt-shell{background:var(--bg2);border-radius:12px;box-shadow:var(--card-shadow);overflow:hidden;margin-bottom:32px;display:flex;flex-direction:column;border:1px solid var(--border);}
+:root{--lw:220px;--dw:18px;}
+.gantt-head{display:flex;flex-direction:column;position:sticky;top:0;z-index:30;background:var(--bg2);border-bottom:2px solid var(--border);}
 .head-row{display:flex;}
-.head-label{min-width:var(--lw);width:var(--lw);background:#1a1a2e;color:white;font-size:12.5px;font-weight:700;display:flex;align-items:center;padding:0 14px;flex-shrink:0;border-right:2px solid rgba(255,255,255,0.15);}
+.head-label{min-width:var(--lw);width:var(--lw);background:#0d1117;color:white;font-size:13px;font-weight:700;display:flex;align-items:center;padding:0 14px;flex-shrink:0;border-right:2px solid rgba(255,255,255,0.1);}
+[data-theme="light"] .head-label{background:#1a1a2e;}
 .head-scroll{overflow:hidden;flex:1;}
-.month-strip{display:flex;height:36px;background:#1a1a2e;}
-.month-cell{display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:white;border-right:2px solid rgba(255,255,255,0.15);letter-spacing:0.4px;flex-shrink:0;}
-.day-strip{display:flex;height:24px;background:#f0f3f8;}
-.day-cell{display:flex;align-items:center;justify-content:center;font-size:9.5px;color:#7a8aa0;border-right:1px solid #e4e9f2;flex-shrink:0;width:var(--dw);min-width:var(--dw);}
-.day-cell.ws{background:#e6ecf7;color:#3a5080;font-weight:700;}
-.day-cell.td{background:#fff3cd;color:#856404;font-weight:700;}
+.month-strip{display:flex;height:38px;background:#0d1117;}
+[data-theme="light"] .month-strip{background:#1a1a2e;}
+.month-cell{display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;border-right:2px solid rgba(255,255,255,0.1);letter-spacing:0.4px;flex-shrink:0;}
+.day-strip{display:flex;height:24px;background:var(--day-bg);}
+.day-cell{display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text2);border-right:1px solid var(--day-border);flex-shrink:0;width:var(--dw);min-width:var(--dw);}
+.day-cell.ws{background:var(--ws-bg);color:var(--sec-color);font-weight:700;}
+.day-cell.td{background:var(--today-bg);color:#856404;font-weight:700;}
+[data-theme="dark"] .day-cell.td{color:#ffc107;}
 .gantt-body{display:flex;overflow-y:auto;max-height:530px;}
-.label-col{min-width:var(--lw);width:var(--lw);flex-shrink:0;border-right:2px solid #dce3ef;background:white;position:sticky;left:0;z-index:20;}
-.lrow{height:48px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid #edf0f5;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.lrow.sec{height:30px;background:#eef2fa;font-size:11px;font-weight:800;color:#3a5080;text-transform:uppercase;letter-spacing:0.6px;border-bottom:1px solid #d0d9ec;}
-.lrow.ms{height:60px;color:#555;font-style:italic;font-size:12px;}
+.label-col{min-width:var(--lw);width:var(--lw);flex-shrink:0;border-right:2px solid var(--lbl-border);background:var(--lbl-bg);position:sticky;left:0;z-index:20;}
+.lrow{height:48px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--border);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text);}
+.lrow.sec{height:30px;background:var(--sec-bg);font-size:11.5px;font-weight:800;color:var(--sec-color);text-transform:uppercase;letter-spacing:0.6px;border-bottom:1px solid var(--sec-border);}
+.lrow.ms{height:60px;color:var(--text2);font-style:italic;font-size:13px;}
 .scroll-col{overflow-x:auto;flex:1;cursor:grab;scroll-behavior:smooth;}
 .scroll-col:active{cursor:grabbing;}
 .tl-inner{position:relative;display:inline-flex;flex-direction:column;}
-.trow{height:48px;display:flex;align-items:center;position:relative;border-bottom:1px solid #edf0f5;}
-.trow:hover{background:#f7f9fc;}
-.trow.sec{height:30px;background:#eef2fa;border-bottom:1px solid #d0d9ec;}
+.trow{height:48px;display:flex;align-items:center;position:relative;border-bottom:1px solid var(--border);}
+.trow:hover{background:var(--row-hover);}
+.trow.sec{height:30px;background:var(--sec-bg);border-bottom:1px solid var(--sec-border);}
 .trow.ms{height:60px;}
-.dcell{width:var(--dw);min-width:var(--dw);height:100%;flex-shrink:0;border-right:1px solid #f0f3f8;}
-.dcell.ws{background:rgba(230,236,247,0.3);border-right:1px solid #dce3ef;}
-.dcell.td{background:rgba(255,220,50,0.12);border-right:2px solid #ffc107;}
-.bar{position:absolute;height:26px;top:50%;transform:translateY(-50%);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 8px;box-shadow:0 2px 8px rgba(0,0,0,0.15);z-index:10;transition:filter .15s,transform .15s;cursor:pointer;}
-.bar:hover{filter:brightness(1.12);transform:translateY(-50%) scaleY(1.08);}
-.mline{position:absolute;width:2px;top:0;bottom:0;z-index:8;pointer-events:none;opacity:0.4;}
-.diamond{position:absolute;width:16px;height:16px;border-radius:2px;transform:translateY(-50%) rotate(45deg);top:50%;z-index:15;box-shadow:0 2px 6px rgba(0,0,0,0.25);cursor:pointer;transition:transform .15s;}
+.dcell{width:var(--dw);min-width:var(--dw);height:100%;flex-shrink:0;border-right:1px solid var(--border);}
+.dcell.ws{background:var(--ws-bg);border-right:1px solid var(--ws-border);}
+.dcell.td{background:var(--today-bg);border-right:2px solid var(--today-border);}
+.bar{position:absolute;height:26px;top:50%;transform:translateY(-50%);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);z-index:10;transition:filter .15s,transform .15s;cursor:pointer;}
+.bar:hover{filter:brightness(1.15);transform:translateY(-50%) scaleY(1.08);}
+.mline{position:absolute;width:2px;top:0;bottom:0;z-index:8;pointer-events:none;opacity:0.5;}
+.diamond{position:absolute;width:16px;height:16px;border-radius:2px;transform:translateY(-50%) rotate(45deg);top:50%;z-index:15;box-shadow:0 2px 6px rgba(0,0,0,0.4);cursor:pointer;transition:transform .15s;}
 .diamond:hover{transform:translateY(-50%) rotate(45deg) scale(1.35);}
-.mlabel{position:absolute;top:5px;font-size:9.5px;font-weight:800;white-space:nowrap;z-index:20;padding:2px 5px;border-radius:3px;color:white;pointer-events:none;}
-.tip{display:none;position:fixed;background:#1a1a2e;color:white;font-size:12px;padding:8px 13px;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,0.28);z-index:9999;pointer-events:none;max-width:260px;line-height:1.6;}
-.dl-section{background:white;border-radius:12px;box-shadow:0 2px 20px rgba(0,0,0,0.07);padding:24px 28px;margin-bottom:32px;}
+.mlabel{position:absolute;top:5px;font-size:10px;font-weight:800;white-space:nowrap;z-index:20;padding:2px 5px;border-radius:3px;color:white;pointer-events:none;}
+.tip{display:none;position:fixed;background:var(--tip-bg);color:var(--tip-color);font-size:13px;padding:9px 14px;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,0.4);z-index:9999;pointer-events:none;max-width:260px;line-height:1.6;}
+
+/* DEADLINES SECTION */
+.dl-section{background:var(--bg2);border-radius:12px;box-shadow:var(--card-shadow);padding:24px 28px;margin-bottom:32px;border:1px solid var(--border);}
 .dl-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap;}
-.dl-header h2{font-size:15px;font-weight:700;color:#1a1a2e;border-bottom:2px solid #e94560;padding-bottom:7px;display:inline-block;}
-.dl-note{font-size:12px;color:#888;font-style:italic;margin-top:5px;}
+.dl-header h2{font-size:16px;font-weight:700;color:var(--text);border-bottom:2px solid #e94560;padding-bottom:7px;display:inline-block;}
+.dl-note{font-size:12.5px;color:var(--text2);font-style:italic;margin-top:5px;}
 .dl-table-wrap{overflow-x:auto;}
-table.dl-tbl{width:100%;border-collapse:collapse;font-size:13px;}
-table.dl-tbl th{background:#1a1a2e;color:white;padding:9px 14px;text-align:left;font-size:12px;white-space:nowrap;}
-table.dl-tbl td{padding:7px 10px;border-bottom:1px solid #edf0f5;vertical-align:middle;}
-table.dl-tbl tr:hover td{background:#f7f9fc;}
-.editable{border:none;background:transparent;font-size:13px;font-family:inherit;color:#1a1a2e;width:100%;min-width:80px;outline:none;cursor:pointer;}
-.editable:focus{background:#f0f6ff;border-radius:4px;cursor:text;padding:2px 4px;}
-input[type=date].editable{min-width:120px;}
+table.dl-tbl{width:100%;border-collapse:collapse;font-size:14px;}
+table.dl-tbl th{background:#0d1117;color:white;padding:10px 14px;text-align:left;font-size:12.5px;white-space:nowrap;}
+[data-theme="light"] table.dl-tbl th{background:#1a1a2e;}
+table.dl-tbl td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text);}
+table.dl-tbl tr:hover td{background:var(--row-hover);}
+.editable{border:none;background:transparent;font-size:14px;font-family:inherit;color:var(--text);width:100%;min-width:80px;outline:none;cursor:pointer;}
+.editable:focus{background:var(--input-focus);border-radius:4px;cursor:text;padding:2px 4px;}
+input[type=date].editable{min-width:120px;color-scheme:dark;}
+[data-theme="light"] input[type=date].editable{color-scheme:light;}
 select.editable{cursor:pointer;}
-.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
-.tag.tbc{background:#fff3cd;color:#856404;}
-.tag.plan{background:#d1e7dd;color:#0a5c36;}
-.tag.dl{background:#f8d7da;color:#842029;}
-.tag.done{background:#e2e3e5;color:#383d41;}
-.btn-del{background:none;border:none;color:#dc3545;font-size:15px;cursor:pointer;padding:2px 6px;border-radius:4px;transition:background .15s;line-height:1;}
-.btn-del:hover{background:#fde8ea;}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;}
+.tag.tbc{background:#3d2e00;color:#ffc107;}
+.tag.plan{background:#0a2e1a;color:#56d364;}
+.tag.dl{background:#3d0a0f;color:#ff7b7b;}
+.tag.done{background:#2d333b;color:#8b949e;}
+[data-theme="light"] .tag.tbc{background:#fff3cd;color:#856404;}
+[data-theme="light"] .tag.plan{background:#d1e7dd;color:#0a5c36;}
+[data-theme="light"] .tag.dl{background:#f8d7da;color:#842029;}
+[data-theme="light"] .tag.done{background:#e2e3e5;color:#383d41;}
+.btn-del{background:none;border:none;color:#e94560;font-size:16px;cursor:pointer;padding:2px 6px;border-radius:4px;transition:background .15s;line-height:1;}
+.btn-del:hover{background:rgba(233,69,96,0.15);}
 .btn-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center;}
-.add-row-btn{background:#1a1a2e;color:white;border:none;padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;}
-.add-row-btn:hover{background:#0f3460;}
-.reset-btn{background:none;border:1px solid #ccc;color:#888;padding:7px 14px;border-radius:7px;font-size:12px;cursor:pointer;transition:all .15s;}
-.reset-btn:hover{border-color:#dc3545;color:#dc3545;background:#fde8ea;}
-footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
+.add-row-btn{background:#238636;color:white;border:none;padding:8px 18px;border-radius:7px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;}
+.add-row-btn:hover{background:#2ea043;}
+[data-theme="light"] .add-row-btn{background:#1a1a2e;}
+[data-theme="light"] .add-row-btn:hover{background:#0f3460;}
+.reset-btn{background:none;border:1px solid var(--border2);color:var(--text2);padding:7px 14px;border-radius:7px;font-size:13px;cursor:pointer;transition:all .15s;}
+.reset-btn:hover{border-color:#e94560;color:#e94560;background:rgba(233,69,96,0.1);}
+footer{text-align:center;padding:18px;font-size:12px;color:var(--text2);}
 </style>
 </head>
 <body>
 <div class="tip" id="tip"></div>
 <header>
+  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️ Light mode</button>
   <h1>MSc Motorsport Engineering &mdash; Thesis Timeline</h1>
   <p>Telemetry-Driven Tyre Thermal &amp; Cold Pressure Recommendation Model for GT3 Motorsport</p>
   <div class="badges">
@@ -138,87 +221,96 @@ footer{text-align:center;padding:18px;font-size:11.5px;color:#aaa;}
 </div>
 <footer>Cranfield University &mdash; MSc Motorsport Engineering &mdash; June 2026</footer>
 
-<!-- Firebase SDKs (compat mode, no bundler needed) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
-
 <script>
-// ---- FIREBASE CONFIG ----
-const firebaseConfig = {
-  apiKey: "AIzaSyC8D7fz-Q6QR9yPV8Jf19fz7keKUUMjtgE",
-  authDomain: "thesis-timeline-712d3.firebaseapp.com",
-  databaseURL: "https://thesis-timeline-712d3-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "thesis-timeline-712d3",
-  storageBucket: "thesis-timeline-712d3.firebasestorage.app",
-  messagingSenderId: "597704919994",
-  appId: "1:597704919994:web:e387b770361de79a18ab83"
+// ---- THEME ----
+function toggleTheme(){
+  const html=document.documentElement;
+  const isDark=html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('themeBtn').textContent=isDark?'🌙 Dark mode':'☀️ Light mode';
+  localStorage.setItem('theme',isDark?'light':'dark');
+}
+// restore saved theme preference
+(function(){
+  const saved=localStorage.getItem('theme');
+  if(saved){
+    document.documentElement.setAttribute('data-theme',saved);
+    document.addEventListener('DOMContentLoaded',()=>{
+      const btn=document.getElementById('themeBtn');
+      if(btn) btn.textContent=saved==='light'?'🌙 Dark mode':'☀️ Light mode';
+    });
+  }
+})();
+
+// ---- FIREBASE ----
+const firebaseConfig={
+  apiKey:"AIzaSyC8D7fz-Q6QR9yPV8Jf19fz7keKUUMjtgE",
+  authDomain:"thesis-timeline-712d3.firebaseapp.com",
+  databaseURL:"https://thesis-timeline-712d3-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"thesis-timeline-712d3",
+  storageBucket:"thesis-timeline-712d3.firebasestorage.app",
+  messagingSenderId:"597704919994",
+  appId:"1:597704919994:web:e387b770361de79a18ab83"
 };
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const MS_REF = db.ref('milestones');
+const db=firebase.database();
+const MS_REF=db.ref('milestones');
 
 // ---- CONSTANTS ----
-const GANTT_START = new Date('2026-06-01');
-const GANTT_END   = new Date('2026-08-31');
-const TODAY_DATE  = new Date('2026-06-03');
-const N_DAYS = Math.round((GANTT_END-GANTT_START)/86400000)+1;
-const DW = 18;
+const GANTT_START=new Date('2026-06-01');
+const GANTT_END=new Date('2026-08-31');
+const TODAY_DATE=new Date('2026-06-03');
+const N_DAYS=Math.round((GANTT_END-GANTT_START)/86400000)+1;
+const DW=18;
 const MONTHS=[{n:'June 2026',days:30},{n:'July 2026',days:31},{n:'August 2026',days:31}];
 const COLOR_MAP={'Deadline':'#e94560','TBC':'#7030a0','Planned':'#ed7d31','Done':'#6c757d'};
 const STATUS_OPTIONS=['TBC','Planned','Deadline','Done'];
 
-const TASKS = [
+const TASKS=[
   {sec:'Research & Scope'},
   {label:'Refine aim & objectives',s:'2026-06-01',e:'2026-06-07',color:'#4472c4',done:true},
-  {label:'Literature review',      s:'2026-06-01',e:'2026-06-30',color:'#4472c4'},
+  {label:'Literature review',s:'2026-06-01',e:'2026-06-30',color:'#4472c4'},
   {sec:'Data & Method'},
   {label:'Data audit & preprocessing',s:'2026-06-08',e:'2026-06-28',color:'#70ad47'},
-  {label:'Method formulation',        s:'2026-06-15',e:'2026-07-12',color:'#70ad47'},
+  {label:'Method formulation',s:'2026-06-15',e:'2026-07-12',color:'#70ad47'},
   {sec:'Implementation'},
-  {label:'MATLAB / Simulink build',   s:'2026-06-22',e:'2026-07-26',color:'#ffc000'},
-  {label:'Validation & sensitivity',  s:'2026-07-13',e:'2026-08-09',color:'#ffc000'},
+  {label:'MATLAB / Simulink build',s:'2026-06-22',e:'2026-07-26',color:'#ffc000'},
+  {label:'Validation & sensitivity',s:'2026-07-13',e:'2026-08-09',color:'#ffc000'},
   {sec:'Analysis & Writing'},
-  {label:'Results analysis',          s:'2026-07-27',e:'2026-08-16',color:'#ed7d31'},
-  {label:'Write thesis chapters',     s:'2026-07-06',e:'2026-08-23',color:'#ed7d31'},
+  {label:'Results analysis',s:'2026-07-27',e:'2026-08-16',color:'#ed7d31'},
+  {label:'Write thesis chapters',s:'2026-07-06',e:'2026-08-23',color:'#ed7d31'},
   {sec:'Final'},
-  {label:'Final edits & formatting',  s:'2026-08-24',e:'2026-08-31',color:'#e94560'},
+  {label:'Final edits & formatting',s:'2026-08-24',e:'2026-08-31',color:'#e94560'},
 ];
 
-const DEFAULT_MILESTONES = [
-  {label:'Lit Review Due',   date:'2026-06-30',color:'#e94560',status:'Deadline',notes:'Chapter submitted before end of June'},
-  {label:'Review 1',         date:'2026-06-29',color:'#7030a0',status:'TBC',     notes:'Supervisor progress check'},
-  {label:'Review 2',         date:'2026-07-27',color:'#7030a0',status:'TBC',     notes:'4 weeks after Review 1'},
-  {label:'Draft Complete',   date:'2026-08-10',color:'#ed7d31',status:'Planned', notes:'Full draft ready for supervisor'},
-  {label:'Poster Submission',date:'2026-08-20',color:'#0097a7',status:'TBC',     notes:'Submit poster to Canvas as PDF'},
-  {label:'Oral Viva',        date:'2026-08-28',color:'#c0392b',status:'TBC',     notes:'10-min presentation + Q&A, two academic staff'},
-  {label:'Submit Thesis',    date:'2026-08-31',color:'#e94560',status:'Deadline',notes:'Final thesis submitted'},
+const DEFAULT_MILESTONES=[
+  {label:'Lit Review Due',date:'2026-06-30',color:'#e94560',status:'Deadline',notes:'Chapter submitted before end of June'},
+  {label:'Review 1',date:'2026-06-29',color:'#7030a0',status:'TBC',notes:'Supervisor progress check'},
+  {label:'Review 2',date:'2026-07-27',color:'#7030a0',status:'TBC',notes:'4 weeks after Review 1'},
+  {label:'Draft Complete',date:'2026-08-10',color:'#ed7d31',status:'Planned',notes:'Full draft ready for supervisor'},
+  {label:'Poster Submission',date:'2026-08-20',color:'#0097a7',status:'TBC',notes:'Submit poster to Canvas as PDF'},
+  {label:'Oral Viva',date:'2026-08-28',color:'#c0392b',status:'TBC',notes:'10-min presentation + Q&A, two academic staff'},
+  {label:'Submit Thesis',date:'2026-08-31',color:'#e94560',status:'Deadline',notes:'Final thesis submitted'},
 ];
 
-let milestones = [];
-let isWriting = false; // prevent echo loop
+let milestones=[];
+let isWriting=false;
 
-// ---- SYNC STATUS ----
-function setSyncStatus(state, msg){
-  const dot=document.getElementById('syncDot');
-  const txt=document.getElementById('syncMsg');
+function setSyncStatus(state,msg){
+  const dot=document.getElementById('syncDot'),txt=document.getElementById('syncMsg');
   dot.className='sync-dot'+(state==='saving'?' saving':state==='error'?' error':'');
   txt.textContent=msg;
 }
-
-// ---- SAVE TO FIREBASE ----
 function saveMilestones(){
   isWriting=true;
   setSyncStatus('saving','Saving\u2026');
   MS_REF.set(milestones).then(()=>{
     setSyncStatus('ok','\u2713 All changes saved \u2014 visible to everyone with this link');
-    setTimeout(()=>isWriting=false, 300);
-  }).catch(err=>{
-    setSyncStatus('error','Save failed: '+err.message);
-    isWriting=false;
-  });
+    setTimeout(()=>isWriting=false,300);
+  }).catch(err=>{setSyncStatus('error','Save failed: '+err.message);isWriting=false;});
 }
-
-// ---- RESET ----
 function resetDefaults(){
   if(confirm('Reset all deadlines to the original defaults? This will update for everyone.')){
     milestones=JSON.parse(JSON.stringify(DEFAULT_MILESTONES));
@@ -226,48 +318,36 @@ function resetDefaults(){
   }
 }
 
-// ---- FIREBASE REAL-TIME LISTENER ----
-// This fires on page load AND whenever anyone else saves a change
-MS_REF.on('value', snapshot=>{
-  if(isWriting) return; // ignore echo of our own write
-  const data = snapshot.val();
-  if(data && Array.isArray(data) && data.length>0){
-    milestones = data;
+MS_REF.on('value',snapshot=>{
+  if(isWriting)return;
+  const data=snapshot.val();
+  if(data&&Array.isArray(data)&&data.length>0){
+    milestones=data;
     setSyncStatus('ok','\u2713 Live \u2014 changes sync to all viewers instantly');
   } else {
-    // First time — seed defaults into Firebase
-    milestones = JSON.parse(JSON.stringify(DEFAULT_MILESTONES));
+    milestones=JSON.parse(JSON.stringify(DEFAULT_MILESTONES));
     MS_REF.set(milestones);
     setSyncStatus('ok','\u2713 Live \u2014 changes sync to all viewers instantly');
   }
   rebuildAll();
-  // Scroll to today only on first load
   if(!window._scrolled){
     window._scrolled=true;
-    setTimeout(()=>{
-      const sc=document.querySelector('.scroll-col');
-      if(sc) sc.scrollLeft=Math.max(0,Math.round((TODAY_DATE-GANTT_START)/86400000)*DW-80);
-    },100);
+    setTimeout(()=>{const sc=document.querySelector('.scroll-col');if(sc)sc.scrollLeft=Math.max(0,Math.round((TODAY_DATE-GANTT_START)/86400000)*DW-80);},100);
   }
 });
 
-MS_REF.on('value', ()=>{}, err=>setSyncStatus('error','Connection error: '+err.message));
-
-// ---- HELPERS ----
 function doff(str){if(!str)return -1;return Math.round((new Date(str)-GANTT_START)/86400000);}
 function fmt(str){if(!str)return '\u2014';return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
 function toInputDate(str){if(!str)return '';try{return new Date(str).toISOString().slice(0,10);}catch(e){return '';}}
 function tagClass(s){return({'TBC':'tbc','Planned':'plan','Deadline':'dl','Done':'done'}[s]||'plan');}
 function msColor(m){return m.color||COLOR_MAP[m.status]||'#7030a0';}
 
-// ---- TOOLTIP ----
 const tip=document.getElementById('tip');
 function showTip(e,html){tip.innerHTML=html;tip.style.display='block';}
 function moveTip(e){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+14)+'px';}
 function hideTip(){tip.style.display='none';}
 document.addEventListener('mousemove',moveTip);
 
-// ---- GANTT ----
 function buildGantt(){
   const ghead=document.getElementById('ghead'),lcol=document.getElementById('lcol'),tinner=document.getElementById('tinner');
   ghead.innerHTML='';lcol.innerHTML='';tinner.innerHTML='';
@@ -283,10 +363,16 @@ function buildGantt(){
   mhs.appendChild(mstrip);mrow.appendChild(mhs);ghead.appendChild(mrow);
 
   const drow=document.createElement('div');drow.className='head-row';
-  const dlbl=document.createElement('div');dlbl.className='head-label';dlbl.style.height='24px';dlbl.style.background='#f0f3f8';drow.appendChild(dlbl);
+  const dlbl=document.createElement('div');dlbl.className='head-label';dlbl.style.height='24px';dlbl.style.background='var(--day-bg)';drow.appendChild(dlbl);
   const dhs=document.createElement('div');dhs.className='head-scroll';dhs.id='dscroll';
   const dstrip=document.createElement('div');dstrip.className='day-strip';
-  for(let d=0;d<N_DAYS;d++){const cur=new Date(GANTT_START);cur.setDate(cur.getDate()+d);const dc=document.createElement('div');let cls='day-cell';if(cur.getDay()===1)cls+=' ws';if(cur.toDateString()===TODAY_DATE.toDateString())cls+=' td';dc.className=cls;dc.textContent=cur.getDate();dstrip.appendChild(dc);}
+  for(let d=0;d<N_DAYS;d++){
+    const cur=new Date(GANTT_START);cur.setDate(cur.getDate()+d);
+    const dc=document.createElement('div');let cls='day-cell';
+    if(cur.getDay()===1)cls+=' ws';
+    if(cur.toDateString()===TODAY_DATE.toDateString())cls+=' td';
+    dc.className=cls;dc.textContent=cur.getDate();dstrip.appendChild(dc);
+  }
   dhs.appendChild(dstrip);drow.appendChild(dhs);ghead.appendChild(drow);
 
   function makeGrid(rowEl,rowH){for(let d=0;d<N_DAYS;d++){const cur=new Date(GANTT_START);cur.setDate(cur.getDate()+d);const dc=document.createElement('div');let cls='dcell';if(cur.getDay()===1)cls+=' ws';if(cur.toDateString()===TODAY_DATE.toDateString())cls+=' td';dc.className=cls;dc.style.height=rowH+'px';rowEl.appendChild(dc);}}
@@ -300,7 +386,7 @@ function buildGantt(){
       const so=doff(task.s),eo=doff(task.e);
       const bar=document.createElement('div');bar.className='bar';
       bar.style.left=(so*DW)+'px';bar.style.width=((eo-so+1)*DW)+'px';
-      bar.style.background=task.done?'#aab4c0':task.color;
+      bar.style.background=task.done?'#30363d':task.color;
       if((eo-so+1)*DW>55)bar.textContent=task.label;
       bar.addEventListener('mouseenter',e=>showTip(e,`<b>${task.label}</b><br>${fmt(task.s)} &rarr; ${fmt(task.e)}<br>${eo-so+1} days${task.done?' &#10003; Done':''}`));
       bar.addEventListener('mouseleave',hideTip);
@@ -333,7 +419,6 @@ function buildGantt(){
   newScol.addEventListener('mouseleave',()=>isDrag=false);
 }
 
-// ---- TABLE ----
 function sortMilestones(){milestones.sort((a,b)=>{if(!a.date)return 1;if(!b.date)return -1;return new Date(a.date)-new Date(b.date);});}
 
 function renderTable(){
