@@ -23,7 +23,7 @@
   --day-border:#30363d;
   --ws-bg:rgba(48,54,61,0.5);
   --ws-border:#444c56;
-  --today-bg:rgba(255,193,7,0.12);
+  --today-bg:rgba(255,193,7,0.18);
   --today-border:#ffc107;
   --sec-bg:#1c2333;
   --sec-color:#79c0ff;
@@ -51,7 +51,7 @@
   --day-border:#e4e9f2;
   --ws-bg:rgba(230,236,247,0.3);
   --ws-border:#dce3ef;
-  --today-bg:rgba(255,220,50,0.12);
+  --today-bg:rgba(255,220,50,0.15);
   --today-border:#ffc107;
   --sec-bg:#eef2fa;
   --sec-color:#3a5080;
@@ -73,7 +73,6 @@ header p{font-size:14px;color:#a8b8d8;margin-top:3px;}
 .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;}
 .badge{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#c8d8f0;font-size:12px;padding:3px 11px;border-radius:20px;}
 
-/* Theme toggle */
 .theme-toggle{position:absolute;top:20px;right:40px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;transition:background .2s;display:flex;align-items:center;gap:6px;}
 .theme-toggle:hover{background:rgba(255,255,255,0.2);}
 
@@ -84,14 +83,12 @@ header p{font-size:14px;color:#a8b8d8;margin-top:3px;}
 @keyframes pulse{from{opacity:1;}to{opacity:0.3;}}
 
 .container{padding:28px 40px;}
-
 .legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;align-items:center;}
 .legend-title{font-size:13px;font-weight:700;color:var(--text2);}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text3);}
 .legend-dot{width:13px;height:13px;border-radius:3px;flex-shrink:0;}
 .scroll-hint{text-align:center;font-size:13px;color:var(--text2);margin-bottom:10px;}
 
-/* GANTT */
 .gantt-shell{background:var(--bg2);border-radius:12px;box-shadow:var(--card-shadow);overflow:hidden;margin-bottom:32px;display:flex;flex-direction:column;border:1px solid var(--border);}
 :root{--lw:220px;--dw:18px;}
 .gantt-head{display:flex;flex-direction:column;position:sticky;top:0;z-index:30;background:var(--bg2);border-bottom:2px solid var(--border);}
@@ -105,8 +102,8 @@ header p{font-size:14px;color:#a8b8d8;margin-top:3px;}
 .day-strip{display:flex;height:24px;background:var(--day-bg);}
 .day-cell{display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text2);border-right:1px solid var(--day-border);flex-shrink:0;width:var(--dw);min-width:var(--dw);}
 .day-cell.ws{background:var(--ws-bg);color:var(--sec-color);font-weight:700;}
-.day-cell.td{background:var(--today-bg);color:#856404;font-weight:700;}
-[data-theme="dark"] .day-cell.td{color:#ffc107;}
+.day-cell.td{background:var(--today-bg);color:#ffc107;font-weight:700;border-right:2px solid var(--today-border);}
+[data-theme="light"] .day-cell.td{color:#856404;}
 .gantt-body{display:flex;overflow-y:auto;max-height:530px;}
 .label-col{min-width:var(--lw);width:var(--lw);flex-shrink:0;border-right:2px solid var(--lbl-border);background:var(--lbl-bg);position:sticky;left:0;z-index:20;}
 .lrow{height:48px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--border);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text);}
@@ -130,7 +127,6 @@ header p{font-size:14px;color:#a8b8d8;margin-top:3px;}
 .mlabel{position:absolute;top:5px;font-size:10px;font-weight:800;white-space:nowrap;z-index:20;padding:2px 5px;border-radius:3px;color:white;pointer-events:none;}
 .tip{display:none;position:fixed;background:var(--tip-bg);color:var(--tip-color);font-size:13px;padding:9px 14px;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,0.4);z-index:9999;pointer-events:none;max-width:260px;line-height:1.6;}
 
-/* DEADLINES SECTION */
 .dl-section{background:var(--bg2);border-radius:12px;box-shadow:var(--card-shadow);padding:24px 28px;margin-bottom:32px;border:1px solid var(--border);}
 .dl-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap;}
 .dl-header h2{font-size:16px;font-weight:700;color:var(--text);border-bottom:2px solid #e94560;padding-bottom:7px;display:inline-block;}
@@ -232,14 +228,13 @@ function toggleTheme(){
   document.getElementById('themeBtn').textContent=isDark?'🌙 Dark mode':'☀️ Light mode';
   localStorage.setItem('theme',isDark?'light':'dark');
 }
-// restore saved theme preference
 (function(){
   const saved=localStorage.getItem('theme');
   if(saved){
     document.documentElement.setAttribute('data-theme',saved);
     document.addEventListener('DOMContentLoaded',()=>{
       const btn=document.getElementById('themeBtn');
-      if(btn) btn.textContent=saved==='light'?'🌙 Dark mode':'☀️ Light mode';
+      if(btn)btn.textContent=saved==='light'?'🌙 Dark mode':'☀️ Light mode';
     });
   }
 })();
@@ -261,7 +256,11 @@ const MS_REF=db.ref('milestones');
 // ---- CONSTANTS ----
 const GANTT_START=new Date('2026-06-01');
 const GANTT_END=new Date('2026-08-31');
-const TODAY_DATE=new Date('2026-06-03');
+// TODAY is always the actual current date — never hardcoded
+const TODAY_DATE=(function(){
+  const d=new Date();
+  return new Date(d.getFullYear(),d.getMonth(),d.getDate());
+})();
 const N_DAYS=Math.round((GANTT_END-GANTT_START)/86400000)+1;
 const DW=18;
 const MONTHS=[{n:'June 2026',days:30},{n:'July 2026',days:31},{n:'August 2026',days:31}];
@@ -286,13 +285,13 @@ const TASKS=[
 ];
 
 const DEFAULT_MILESTONES=[
-  {label:'Lit Review Due',date:'2026-06-30',color:'#e94560',status:'Deadline',notes:'Chapter submitted before end of June'},
-  {label:'Review 1',date:'2026-06-29',color:'#7030a0',status:'TBC',notes:'Supervisor progress check'},
-  {label:'Review 2',date:'2026-07-27',color:'#7030a0',status:'TBC',notes:'4 weeks after Review 1'},
-  {label:'Draft Complete',date:'2026-08-10',color:'#ed7d31',status:'Planned',notes:'Full draft ready for supervisor'},
-  {label:'Poster Submission',date:'2026-08-20',color:'#0097a7',status:'TBC',notes:'Submit poster to Canvas as PDF'},
-  {label:'Oral Viva',date:'2026-08-28',color:'#c0392b',status:'TBC',notes:'10-min presentation + Q&A, two academic staff'},
-  {label:'Submit Thesis',date:'2026-08-31',color:'#e94560',status:'Deadline',notes:'Final thesis submitted'},
+  {label:'Lit Review Due',   date:'2026-06-30',color:'#e94560',status:'Deadline',notes:'Chapter submitted before end of June'},
+  {label:'Review 1',         date:'2026-06-29',color:'#7030a0',status:'TBC',    notes:'Supervisor progress check'},
+  {label:'Review 2',         date:'2026-07-27',color:'#7030a0',status:'TBC',    notes:'4 weeks after Review 1'},
+  {label:'Draft Complete',   date:'2026-08-10',color:'#ed7d31',status:'Planned',notes:'Full draft ready for supervisor'},
+  {label:'Poster Submission',date:'2026-08-20',color:'#0097a7',status:'TBC',    notes:'Submit poster to Canvas as PDF'},
+  {label:'Oral Viva',        date:'2026-08-28',color:'#c0392b',status:'TBC',    notes:'10-min presentation + Q&A, two academic staff'},
+  {label:'Submit Thesis',    date:'2026-08-31',color:'#e94560',status:'Deadline',notes:'Final thesis submitted'},
 ];
 
 let milestones=[];
@@ -303,6 +302,7 @@ function setSyncStatus(state,msg){
   dot.className='sync-dot'+(state==='saving'?' saving':state==='error'?' error':'');
   txt.textContent=msg;
 }
+
 function saveMilestones(){
   isWriting=true;
   setSyncStatus('saving','Saving\u2026');
@@ -311,6 +311,7 @@ function saveMilestones(){
     setTimeout(()=>isWriting=false,300);
   }).catch(err=>{setSyncStatus('error','Save failed: '+err.message);isWriting=false;});
 }
+
 function resetDefaults(){
   if(confirm('Reset all deadlines to the original defaults? This will update for everyone.')){
     milestones=JSON.parse(JSON.stringify(DEFAULT_MILESTONES));
@@ -318,26 +319,47 @@ function resetDefaults(){
   }
 }
 
+// ---- FIREBASE LISTENER ----
+// Only seeds defaults if the DB returns null (truly empty)
 MS_REF.on('value',snapshot=>{
   if(isWriting)return;
   const data=snapshot.val();
-  if(data&&Array.isArray(data)&&data.length>0){
-    milestones=data;
-    setSyncStatus('ok','\u2713 Live \u2014 changes sync to all viewers instantly');
-  } else {
+  if(data===null||data===undefined){
+    // First ever load — seed defaults
     milestones=JSON.parse(JSON.stringify(DEFAULT_MILESTONES));
     MS_REF.set(milestones);
     setSyncStatus('ok','\u2713 Live \u2014 changes sync to all viewers instantly');
+  } else if(Array.isArray(data)&&data.length>0){
+    milestones=data;
+    setSyncStatus('ok','\u2713 Live \u2014 changes sync to all viewers instantly');
+  } else {
+    // Unexpected shape — restore defaults
+    milestones=JSON.parse(JSON.stringify(DEFAULT_MILESTONES));
+    MS_REF.set(milestones);
+    setSyncStatus('ok','\u2713 Live \u2014 restored defaults');
   }
   rebuildAll();
   if(!window._scrolled){
     window._scrolled=true;
-    setTimeout(()=>{const sc=document.querySelector('.scroll-col');if(sc)sc.scrollLeft=Math.max(0,Math.round((TODAY_DATE-GANTT_START)/86400000)*DW-80);},100);
+    setTimeout(()=>{
+      const sc=document.querySelector('.scroll-col');
+      if(sc)sc.scrollLeft=Math.max(0,Math.round((TODAY_DATE-GANTT_START)/86400000)*DW-80);
+    },100);
   }
 });
 
-function doff(str){if(!str)return -1;return Math.round((new Date(str)-GANTT_START)/86400000);}
-function fmt(str){if(!str)return '\u2014';return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+// ---- HELPERS ----
+function doff(str){
+  if(!str)return -1;
+  // Parse date string as local date to avoid timezone offset issues
+  const parts=str.split('-');
+  if(parts.length===3){
+    const d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
+    return Math.round((d-GANTT_START)/86400000);
+  }
+  return Math.round((new Date(str)-GANTT_START)/86400000);
+}
+function fmt(str){if(!str)return '\u2014';const p=str.split('-');if(p.length===3)return new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2])).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});return new Date(str).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
 function toInputDate(str){if(!str)return '';try{return new Date(str).toISOString().slice(0,10);}catch(e){return '';}}
 function tagClass(s){return({'TBC':'tbc','Planned':'plan','Deadline':'dl','Done':'done'}[s]||'plan');}
 function msColor(m){return m.color||COLOR_MAP[m.status]||'#7030a0';}
@@ -348,6 +370,12 @@ function moveTip(e){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+
 function hideTip(){tip.style.display='none';}
 document.addEventListener('mousemove',moveTip);
 
+function isToday(d){
+  return d.getFullYear()===TODAY_DATE.getFullYear()&&
+         d.getMonth()===TODAY_DATE.getMonth()&&
+         d.getDate()===TODAY_DATE.getDate();
+}
+
 function buildGantt(){
   const ghead=document.getElementById('ghead'),lcol=document.getElementById('lcol'),tinner=document.getElementById('tinner');
   ghead.innerHTML='';lcol.innerHTML='';tinner.innerHTML='';
@@ -355,6 +383,7 @@ function buildGantt(){
   tinner.style.width=totalW+'px';
   const active=milestones.filter(m=>m.date&&doff(m.date)>=0&&doff(m.date)<N_DAYS);
 
+  // Month header
   const mrow=document.createElement('div');mrow.className='head-row';
   const mlbl=document.createElement('div');mlbl.className='head-label';mlbl.textContent='Task';mrow.appendChild(mlbl);
   const mhs=document.createElement('div');mhs.className='head-scroll';mhs.id='hscroll';
@@ -362,20 +391,33 @@ function buildGantt(){
   MONTHS.forEach(m=>{const mc=document.createElement('div');mc.className='month-cell';mc.style.width=(m.days*DW)+'px';mc.style.minWidth=(m.days*DW)+'px';mc.textContent=m.n;mstrip.appendChild(mc);});
   mhs.appendChild(mstrip);mrow.appendChild(mhs);ghead.appendChild(mrow);
 
+  // Day header
   const drow=document.createElement('div');drow.className='head-row';
   const dlbl=document.createElement('div');dlbl.className='head-label';dlbl.style.height='24px';dlbl.style.background='var(--day-bg)';drow.appendChild(dlbl);
   const dhs=document.createElement('div');dhs.className='head-scroll';dhs.id='dscroll';
   const dstrip=document.createElement('div');dstrip.className='day-strip';
   for(let d=0;d<N_DAYS;d++){
-    const cur=new Date(GANTT_START);cur.setDate(cur.getDate()+d);
-    const dc=document.createElement('div');let cls='day-cell';
+    const cur=new Date(GANTT_START.getFullYear(),GANTT_START.getMonth(),GANTT_START.getDate()+d);
+    const dc=document.createElement('div');
+    let cls='day-cell';
     if(cur.getDay()===1)cls+=' ws';
-    if(cur.toDateString()===TODAY_DATE.toDateString())cls+=' td';
-    dc.className=cls;dc.textContent=cur.getDate();dstrip.appendChild(dc);
+    if(isToday(cur))cls+=' td';
+    dc.className=cls;dc.textContent=cur.getDate();
+    dstrip.appendChild(dc);
   }
   dhs.appendChild(dstrip);drow.appendChild(dhs);ghead.appendChild(drow);
 
-  function makeGrid(rowEl,rowH){for(let d=0;d<N_DAYS;d++){const cur=new Date(GANTT_START);cur.setDate(cur.getDate()+d);const dc=document.createElement('div');let cls='dcell';if(cur.getDay()===1)cls+=' ws';if(cur.toDateString()===TODAY_DATE.toDateString())cls+=' td';dc.className=cls;dc.style.height=rowH+'px';rowEl.appendChild(dc);}}
+  function makeGrid(rowEl,rowH){
+    for(let d=0;d<N_DAYS;d++){
+      const cur=new Date(GANTT_START.getFullYear(),GANTT_START.getMonth(),GANTT_START.getDate()+d);
+      const dc=document.createElement('div');
+      let cls='dcell';
+      if(cur.getDay()===1)cls+=' ws';
+      if(isToday(cur))cls+=' td';
+      dc.className=cls;dc.style.height=rowH+'px';
+      rowEl.appendChild(dc);
+    }
+  }
   function addMlines(rowEl){active.forEach(m=>{const ml=document.createElement('div');ml.className='mline';ml.style.left=(doff(m.date)*DW+DW/2-1)+'px';ml.style.background=msColor(m);rowEl.appendChild(ml);});}
 
   TASKS.forEach(task=>{
@@ -400,9 +442,9 @@ function buildGantt(){
   makeGrid(mtrow,60);
   active.forEach(m=>{
     const off=doff(m.date);
-    const d=document.createElement('div');d.className='diamond';d.style.left=(off*DW+DW/2-8)+'px';d.style.background=msColor(m);
-    d.addEventListener('mouseenter',e=>showTip(e,`<b>${m.label}</b><br>${fmt(m.date)}${m.notes?'<br>'+m.notes:''}${m.status?'<br><i>'+m.status+'</i>':''}`));
-    d.addEventListener('mouseleave',hideTip);mtrow.appendChild(d);
+    const dEl=document.createElement('div');dEl.className='diamond';dEl.style.left=(off*DW+DW/2-8)+'px';dEl.style.background=msColor(m);
+    dEl.addEventListener('mouseenter',e=>showTip(e,`<b>${m.label}</b><br>${fmt(m.date)}${m.notes?'<br>'+m.notes:''}${m.status?'<br><i>'+m.status+'</i>':''}`));
+    dEl.addEventListener('mouseleave',hideTip);mtrow.appendChild(dEl);
     const ml=document.createElement('div');ml.className='mlabel';ml.style.left=(off*DW+DW/2-18)+'px';ml.style.background=msColor(m);ml.textContent=m.label;
     mtrow.appendChild(ml);
   });
